@@ -165,7 +165,7 @@
             this.btnSource.TabIndex = 11;
             this.btnSource.Text = "Fichiers source";
             this.btnSource.UseVisualStyleBackColor = true;
-            this.btnSource.Click += new System.EventHandler(this.btnSource_Click);
+            this.btnSource.Click += new System.EventHandler(this.BtnChoisirSource);
             // 
             // btnDestination
             // 
@@ -175,7 +175,7 @@
             this.btnDestination.TabIndex = 12;
             this.btnDestination.Text = "Fichiers destination";
             this.btnDestination.UseVisualStyleBackColor = true;
-            this.btnDestination.Click += new System.EventHandler(this.btnDestination_Click);
+            this.btnDestination.Click += new System.EventHandler(this.BtnChoisirDestination);
             // 
             // lblSource
             // 

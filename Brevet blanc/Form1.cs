@@ -18,7 +18,6 @@ namespace Brevet_blanc
             InitializeComponent();
         }
 
-        // public string lblSource.Text = @"\\Serveur2008\Laurent$\Logiciels\";
         public System.Data.DataTable TableNotes = new System.Data.DataTable();
 
         public System.Data.DataTable TableComposantes = new System.Data.DataTable();
@@ -37,6 +36,33 @@ namespace Brevet_blanc
             RemplirListeBox(chkLb_Composantes, TableComposantes);
             for (int i = 0; i < 5; i++)
                 chkLb_Composantes.SetItemChecked(i, true);
+        }
+
+        private void BtnChoisirSource(object sender, EventArgs e)
+        {
+            var dlg = new FolderBrowserDialog();
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                lblSource.Text = dlg.SelectedPath + @"\";
+            }
+
+            Principal_Load(sender, e);
+        }
+
+        private void BtnChoisirDestination(object sender, EventArgs e)
+        {
+            var dlg = new FolderBrowserDialog();
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                lblDestination.Text = dlg.SelectedPath + @"\";
+            }
+
+            Directory.CreateDirectory(lblDestination.Text + @"DNB");
+            Directory.CreateDirectory(lblDestination.Text + @"DNB\Composantes");
+            Directory.CreateDirectory(lblDestination.Text + @"DNB\Modèles");
+            Directory.CreateDirectory(lblDestination.Text + @"DNB\Notes");
         }
 
         private void BtnGénérerDnb(object sender, EventArgs e)
@@ -644,33 +670,6 @@ namespace Brevet_blanc
                     catch { }
                 }
             }
-        }
-
-        private void btnSource_Click(object sender, EventArgs e)
-        {
-            var dlg = new FolderBrowserDialog();
-
-            if (dlg.ShowDialog() == DialogResult.OK)
-            {
-                lblSource.Text = dlg.SelectedPath + @"\";
-            }
-
-            Principal_Load(sender, e);
-        }
-
-        private void btnDestination_Click(object sender, EventArgs e)
-        {
-            var dlg = new FolderBrowserDialog();
-
-            if (dlg.ShowDialog() == DialogResult.OK)
-            {
-                lblDestination.Text = dlg.SelectedPath + @"\";
-            }
-
-            Directory.CreateDirectory(lblDestination.Text + @"DNB");
-            Directory.CreateDirectory(lblDestination.Text + @"DNB\Composantes");
-            Directory.CreateDirectory(lblDestination.Text + @"DNB\Modèles");
-            Directory.CreateDirectory(lblDestination.Text + @"DNB\Notes");
         }
     }
 }
