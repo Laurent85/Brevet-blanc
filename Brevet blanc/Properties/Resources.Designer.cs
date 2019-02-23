@@ -61,6 +61,26 @@ namespace Brevet_blanc.Properties {
         }
         
         /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ED {
+            get {
+                object obj = ResourceManager.GetObject("ED", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap LOGO_COLLEGE_SAINTJACQUES_GEANT {
+            get {
+                object obj = ResourceManager.GetObject("LOGO COLLEGE SAINTJACQUES GEANT", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une ressource localisée de type System.Byte[].
         /// </summary>
         internal static byte[] Publipostage {

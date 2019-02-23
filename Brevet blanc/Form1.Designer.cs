@@ -44,6 +44,10 @@
             this.btnDestination = new System.Windows.Forms.Button();
             this.lblSource = new System.Windows.Forms.Label();
             this.lblDestination = new System.Windows.Forms.Label();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // BtnGénérerDiplomes
@@ -97,33 +101,33 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Lemon", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.Blue;
             this.label1.Location = new System.Drawing.Point(62, 167);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(207, 24);
+            this.label1.Size = new System.Drawing.Size(167, 24);
             this.label1.TabIndex = 5;
             this.label1.Text = "Epreuves écrites";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Lemon", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.Blue;
             this.label2.Location = new System.Drawing.Point(341, 167);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(210, 24);
+            this.label2.Size = new System.Drawing.Size(164, 24);
             this.label2.TabIndex = 6;
             this.label2.Text = "Contrôle continu";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Lemon", 21.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.Crimson;
-            this.label3.Location = new System.Drawing.Point(261, 9);
+            this.label3.Location = new System.Drawing.Point(297, 9);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(241, 38);
+            this.label3.Size = new System.Drawing.Size(189, 33);
             this.label3.TabIndex = 7;
             this.label3.Text = "Brevet blanc";
             // 
@@ -193,11 +197,33 @@
             this.lblDestination.Size = new System.Drawing.Size(0, 13);
             this.lblDestination.TabIndex = 14;
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = global::Brevet_blanc.Properties.Resources.ED;
+            this.pictureBox2.Location = new System.Drawing.Point(688, 9);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(100, 69);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 16;
+            this.pictureBox2.TabStop = false;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::Brevet_blanc.Properties.Resources.LOGO_COLLEGE_SAINTJACQUES_GEANT;
+            this.pictureBox1.Location = new System.Drawing.Point(12, 9);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(100, 50);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 15;
+            this.pictureBox1.TabStop = false;
+            // 
             // Principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 519);
+            this.Controls.Add(this.pictureBox2);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.lblDestination);
             this.Controls.Add(this.lblSource);
             this.Controls.Add(this.btnDestination);
@@ -216,6 +242,8 @@
             this.Name = "Principal";
             this.Text = "Brevet blanc";
             this.Load += new System.EventHandler(this.Principal_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -239,6 +267,8 @@
         private System.Windows.Forms.Button btnDestination;
         private System.Windows.Forms.Label lblSource;
         private System.Windows.Forms.Label lblDestination;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox pictureBox2;
     }
 }
 
