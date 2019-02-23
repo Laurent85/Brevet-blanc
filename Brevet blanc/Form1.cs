@@ -19,7 +19,6 @@ namespace Brevet_blanc
         }
 
         public System.Data.DataTable TableNotes = new System.Data.DataTable();
-
         public System.Data.DataTable TableComposantes = new System.Data.DataTable();
         public int RowCount;
         public string Classe;
