@@ -77,7 +77,7 @@ namespace Brevet_blanc
 
             foreach (var fichier in fichiers)
             {
-                File.Delete(fichier);
+                //File.Delete(fichier);
             }
 
             var strPath = lblDestination.Text + @"DNB\Modèles\Dnb_sans_oral.xlsx";
@@ -125,6 +125,10 @@ namespace Brevet_blanc
 
                 var a3 = (string)(worksheet.Cells[3, 1] as Range)?.Value;
                 Classe = a3.Substring(0, 2);
+                File.Delete(lblDestination.Text + @"DNB\DNB1-" + Classe + @".xlsx");
+                File.Delete(lblDestination.Text + @"DNB\DNB1-" + Classe + @".pdf");
+                File.Delete(lblDestination.Text + @"DNB\Statistiques.xlsx");
+                File.Delete(lblDestination.Text + @"DNB\Statistiques.pdf");
                 var effectifTemp = a3.Substring(a3.Length - 2);
                 int effectif = int.Parse(effectifTemp);
 
@@ -274,54 +278,57 @@ namespace Brevet_blanc
             var fichiersDnb = Directory.GetFiles(lblDestination.Text + @"DNB\", "*.*");
             RowCount = 0;
             k = 0;
-            foreach (var fichier in fichiersDnb)
+            foreach (var fichier in chkLb_Notes.CheckedItems)
             {
-                if (fichier.Contains("DNB1"))
+                //if (fichier.Contains("DNB1"))
                 {
                     RowCount++;
                 }
             }
 
-            foreach (var fichier in fichiersDnb)
+            foreach (var fichier1 in chkLb_Notes.CheckedItems)
             {
-                if (fichier.Contains("DNB1"))
+                foreach (var fichier in fichiersDnb)
                 {
-                    var appWord = new Microsoft.Office.Interop.Word.Application();
-                    var wordDocument = appWord.Documents.Add(lblDestination.Text + @"DNB\Modèles\Dnb_sans_oral.docx");
-                    appWord.Visible = false;
-                    wordDocument.MailMerge.MainDocumentType = WdMailMergeMainDocType.wdFormLetters;
-                    var nomDuFichierDnb = Path.GetFileNameWithoutExtension(fichier);
-                    Classe = nomDuFichierDnb.Substring(5, 2);
+                    if ((fichier.Contains(fichier1.ToString().Substring(0, 2))) && (fichier.Contains("DNB1")))
+                    {
+                        var appWord = new Microsoft.Office.Interop.Word.Application();
+                        var wordDocument = appWord.Documents.Add(lblDestination.Text + @"DNB\Modèles\Dnb_sans_oral.docx");
+                        appWord.Visible = false;
+                        wordDocument.MailMerge.MainDocumentType = WdMailMergeMainDocType.wdFormLetters;
+                        var nomDuFichierDnb = Path.GetFileNameWithoutExtension(fichier);
+                        Classe = nomDuFichierDnb.Substring(5, 2);
 
-                    string strDataFile = fichier;
-                    object objTrue = true;
-                    object objFalse = false;
-                    object objMiss = Missing.Value;
-                    object type = WdMergeSubType.wdMergeSubTypeAccess;
-                    object strQuery = "SELECT * FROM [Récapitulatif$]";
-                    object connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + strDataFile + ";Extended Properties=\"HDR=YES;IMEX=1\";Jet OLEDB:EngineType=37";
+                        string strDataFile = fichier;
+                        object objTrue = true;
+                        object objFalse = false;
+                        object objMiss = Missing.Value;
+                        object type = WdMergeSubType.wdMergeSubTypeAccess;
+                        object strQuery = "SELECT * FROM [Récapitulatif$]";
+                        object connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + strDataFile + ";Extended Properties=\"HDR=YES;IMEX=1\";Jet OLEDB:EngineType=37";
 
-                    wordDocument.MailMerge.OpenDataSource(fichier, objMiss, objFalse, objTrue, objTrue, objFalse,
-                        objMiss, objMiss, objMiss, objMiss, objMiss, connectionString, strQuery, objMiss, objMiss, type);
+                        wordDocument.MailMerge.OpenDataSource(fichier, objMiss, objFalse, objTrue, objTrue, objFalse,
+                            objMiss, objMiss, objMiss, objMiss, objMiss, connectionString, strQuery, objMiss, objMiss, type);
 
-                    wordDocument.MailMerge.Destination = WdMailMergeDestination.wdSendToNewDocument;
-                    wordDocument.MailMerge.SuppressBlankLines = true;
-                    wordDocument.MailMerge.Execute(false);
+                        wordDocument.MailMerge.Destination = WdMailMergeDestination.wdSendToNewDocument;
+                        wordDocument.MailMerge.SuppressBlankLines = true;
+                        wordDocument.MailMerge.Execute(false);
 
-                    var oLetters = appWord.ActiveDocument;
-                    //oLetters.SaveAs2(@"F:\DNB\" +  nomDuFichierDnb + ".docx",
-                    //WdSaveFormat.wdFormatDocumentDefault);
-                    oLetters.ExportAsFixedFormat(lblDestination.Text + @"DNB\" + nomDuFichierDnb + ".pdf",
-                        WdExportFormat.wdExportFormatPDF);
-                    oLetters.Close(WdSaveOptions.wdDoNotSaveChanges);
-                    wordDocument.Close(WdSaveOptions.wdDoNotSaveChanges);
-                    appWord.Quit();
-                    GC.Collect();
+                        var oLetters = appWord.ActiveDocument;
+                        //oLetters.SaveAs2(@"F:\DNB\" +  nomDuFichierDnb + ".docx",
+                        //WdSaveFormat.wdFormatDocumentDefault);
+                        oLetters.ExportAsFixedFormat(lblDestination.Text + @"DNB\" + nomDuFichierDnb + ".pdf",
+                            WdExportFormat.wdExportFormatPDF);
+                        oLetters.Close(WdSaveOptions.wdDoNotSaveChanges);
+                        wordDocument.Close(WdSaveOptions.wdDoNotSaveChanges);
+                        appWord.Quit();
+                        GC.Collect();
 
-                    k++;
-                    ThreadDiplomes.ReportProgress(k);
+                        k++;
+                        ThreadDiplomes.ReportProgress(k);
+                    }
+                    if (fichier.Contains("DNB-")) File.Delete(fichier);
                 }
-                if (fichier.Contains("DNB-")) File.Delete(fichier);
             }
 
             TuerProcessus("Winword");
