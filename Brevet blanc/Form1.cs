@@ -280,14 +280,12 @@ namespace Brevet_blanc
             k = 0;
             foreach (var fichier in chkLb_Notes.CheckedItems)
             {
-                //if (fichier.Contains("DNB1"))
-                {
-                    RowCount++;
-                }
+                RowCount++;
             }
 
             foreach (var fichier1 in chkLb_Notes.CheckedItems)
             {
+                var classe = fichier1.ToString().Substring(0, 2);
                 foreach (var fichier in fichiersDnb)
                 {
                     if ((fichier.Contains(fichier1.ToString().Substring(0, 2))) && (fichier.Contains("DNB1")))
@@ -327,8 +325,18 @@ namespace Brevet_blanc
                         k++;
                         ThreadDiplomes.ReportProgress(k);
                     }
-                    if (fichier.Contains("DNB-")) File.Delete(fichier);
+                    
                 }
+                
+                    if (File.Exists(lblDestination.Text + @"DNB\Composantes\DNB-" + classe + @".xlsx"))
+                        File.Delete(lblDestination.Text + @"DNB\Composantes\DNB-" + classe + @".xlsx");
+                    File.Move(lblDestination.Text + @"DNB\DNB-" + classe + @".xlsx", lblDestination.Text + @"DNB\Composantes\DNB-" + classe + @".xlsx");
+                
+                
+                    if (File.Exists(lblDestination.Text + @"DNB\Notes\DNB1-" + classe + @".xlsx"))
+                        File.Delete(lblDestination.Text + @"DNB\Notes\DNB1-" + classe + @".xlsx");
+                    File.Move(lblDestination.Text + @"DNB\DNB1-" + classe + @".xlsx", lblDestination.Text + @"DNB\Notes\DNB1-" + classe + @".xlsx");
+                
             }
 
             TuerProcessus("Winword");
@@ -355,7 +363,7 @@ namespace Brevet_blanc
 
         private void BtnGénérerStatistiques(object sender, EventArgs e)
         {
-            var fichiersDnbXlsx = Directory.GetFiles(lblDestination.Text + @"DNB\");
+            var fichiersDnbXlsx = Directory.GetFiles(lblDestination.Text + @"DNB\Notes\");
             var fichierStat = lblDestination.Text + @"DNB\Statistiques.xlsx";
             if (File.Exists(fichierStat)) File.Delete(fichierStat);
             var assembly = Assembly.GetExecutingAssembly();
@@ -387,7 +395,7 @@ namespace Brevet_blanc
                 if (fichierDnbXlsx.Contains("DNB1") && fichierDnbXlsx.Contains("xlsx"))
                 {
                     ligne++;
-                    var fichierDnb = lblDestination.Text + @"DNB\" + fichierDnbXlsx;
+                    var fichierDnb = lblDestination.Text + @"DNB\Notes\" + fichierDnbXlsx;
                     var dnbXlsx = excelApplication.Workbooks.Open(fichierDnb);
                     var dnbRécapitulatif = (Worksheet)dnbXlsx.Sheets.Item[1];
 
@@ -483,7 +491,7 @@ namespace Brevet_blanc
                 if (fichierDnbXlsx.Contains("DNB1") && fichierDnbXlsx.Contains("xlsx"))
                 {
                     ligne++;
-                    var fichierDnb = lblDestination.Text + @"DNB\" + fichierDnbXlsx;
+                    var fichierDnb = lblDestination.Text + @"DNB\Notes\" + fichierDnbXlsx;
                     var dnbXlsx = excelApplication.Workbooks.Open(fichierDnb);
                     var dnbEpreuvesEcrites = (Worksheet)dnbXlsx.Sheets.Item[2];
                     var dnbRécapitulatif = (Worksheet)dnbXlsx.Sheets.Item[1];
@@ -540,7 +548,7 @@ namespace Brevet_blanc
                 {
                     ligne++;
                     var colonne1 = 'C';
-                    var fichierDnb = lblDestination.Text + @"DNB\" + fichierDnbXlsx;
+                    var fichierDnb = lblDestination.Text + @"DNB\Notes\" + fichierDnbXlsx;
                     var dnbXlsx = excelApplication.Workbooks.Open(fichierDnb);
                     //var dnbEpreuvesEcrites = (Worksheet)dnbXlsx.Sheets.Item[2];
                     var dnbRécapitulatif = (Worksheet)dnbXlsx.Sheets.Item[1];
