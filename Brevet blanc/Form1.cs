@@ -234,6 +234,7 @@ namespace Brevet_blanc
                 for (int i = 2; i <= effectif + 1; i++) //Copie des notes
                 {
                     int m = 11;
+                    int totalPoints = 0;
                     for (int j = 2; j <= 8; j++)
                     {
                         if (worksheet.Cells[i + 3, j + 9].Value != null)
@@ -241,14 +242,18 @@ namespace Brevet_blanc
                             épreuvesEcrites2.Cells[i, j].Value = worksheet.Cells[i + 3, j + 9].Value;
                             m = m + 1;
                             if (m == 14) m = 15;
+                            totalPoints = totalPoints + Bareme(j);
                         }
                         if (worksheet.Cells[i + 3, j + 9].Value == null) //Gestion des cellules vides
                         {
                             récapitulatif.Cells[i, j + m].value = "";
+                            épreuvesEcrites2.Cells[i, 1].value = épreuvesEcrites2.Cells[i, 1].value + "*";
                             m = m + 1;
                             if (m == 14) m = 15;
                         }
                     }
+                    récapitulatif.Range["AR" + i].Value = totalPoints + 400;
+                    récapitulatif.Range["AT" + i].Value = totalPoints;
                 }
 
                 var cells = épreuvesEcrites2.Range["A" + (effectif + 2) + ":A500"]; //Nettoyage bas tableau récapitulatif
@@ -398,6 +403,7 @@ namespace Brevet_blanc
                     var fichierDnb = lblDestination.Text + @"DNB\Notes\" + fichierDnbXlsx;
                     var dnbXlsx = excelApplication.Workbooks.Open(fichierDnb);
                     var dnbRécapitulatif = (Worksheet)dnbXlsx.Sheets.Item[1];
+                    var épreuvesEcrites = (Worksheet)dnbXlsx.Sheets.Item[2];
 
                     var range = dnbRécapitulatif.Range["AG2:AG50"];
                     var colMoyennes = dnbRécapitulatif.Range["AF2:AF50"];
@@ -416,7 +422,7 @@ namespace Brevet_blanc
                                 statSynthèse.Range["C" + ligne].Value =
                                     int.Parse(statSynthèse.Range["C" + ligne].Value.ToString()) + 1;
                                 statListing.Range["A" + ligne1].Value =
-                                    dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + dnbRécapitulatif.Range["A" + ligneEleve].Value.ToString() + " (" + dnbRécapitulatif.Range["AG" + ligneEleve].Value.ToString() + ")";
+                                    dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + épreuvesEcrites.Range["A" + ligneEleve].Value.ToString() + " (" + dnbRécapitulatif.Range["AG" + ligneEleve].Value.ToString() + ")";
                                 ligne1++;
                             }
                             if (element.Value.ToString().Contains("sans mention"))
@@ -439,7 +445,7 @@ namespace Brevet_blanc
                                 statSynthèse.Range["G" + ligne].Value =
                                     int.Parse(statSynthèse.Range["G" + ligne].Value.ToString()) + 1;
                                 statListing.Range["E" + ligne2].Value =
-                                    dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + dnbRécapitulatif.Range["A" + ligneEleve].Value.ToString();
+                                    dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + dnbRécapitulatif.Range["A" + ligneEleve].Value.ToString() + " (" + dnbRécapitulatif.Range["AE" + ligneEleve].Value.ToString() + " / " + dnbRécapitulatif.Range["AR" + ligneEleve].Value.ToString() + ")";
                                 ligne2++;
                             }
 
@@ -684,6 +690,19 @@ namespace Brevet_blanc
                     catch { }
                 }
             }
+        }
+
+        private int Bareme(int colonne)
+        {
+            int bareme = 0;
+            if (colonne == 2) bareme = 50;
+            if (colonne == 3) bareme = 40;
+            if (colonne == 4) bareme = 10;
+            if (colonne == 5) bareme = 50;
+            if (colonne == 6) bareme = 100;
+            if (colonne == 7) bareme = 25;
+            if (colonne == 8) bareme = 25;
+            return bareme;
         }
     }
 }
