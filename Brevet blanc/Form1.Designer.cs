@@ -46,8 +46,16 @@
             this.lblDestination = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.rdbDnb1 = new System.Windows.Forms.RadioButton();
+            this.rdbDnb2 = new System.Windows.Forms.RadioButton();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.rdbAvecOral = new System.Windows.Forms.RadioButton();
+            this.rdbSansOral = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // BtnGénérerDiplomes
@@ -217,11 +225,74 @@
             this.pictureBox1.TabIndex = 15;
             this.pictureBox1.TabStop = false;
             // 
+            // rdbDnb1
+            // 
+            this.rdbDnb1.AutoSize = true;
+            this.rdbDnb1.Location = new System.Drawing.Point(15, 7);
+            this.rdbDnb1.Name = "rdbDnb1";
+            this.rdbDnb1.Size = new System.Drawing.Size(54, 17);
+            this.rdbDnb1.TabIndex = 17;
+            this.rdbDnb1.TabStop = true;
+            this.rdbDnb1.Text = "DNB1";
+            this.rdbDnb1.UseVisualStyleBackColor = true;
+            // 
+            // rdbDnb2
+            // 
+            this.rdbDnb2.AutoSize = true;
+            this.rdbDnb2.Location = new System.Drawing.Point(15, 27);
+            this.rdbDnb2.Name = "rdbDnb2";
+            this.rdbDnb2.Size = new System.Drawing.Size(54, 17);
+            this.rdbDnb2.TabIndex = 18;
+            this.rdbDnb2.TabStop = true;
+            this.rdbDnb2.Text = "DNB2";
+            this.rdbDnb2.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.rdbDnb1);
+            this.panel1.Controls.Add(this.rdbDnb2);
+            this.panel1.Location = new System.Drawing.Point(589, 144);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(94, 47);
+            this.panel1.TabIndex = 19;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.rdbSansOral);
+            this.panel2.Controls.Add(this.rdbAvecOral);
+            this.panel2.Location = new System.Drawing.Point(691, 144);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(97, 47);
+            this.panel2.TabIndex = 20;
+            // 
+            // rdbAvecOral
+            // 
+            this.rdbAvecOral.AutoSize = true;
+            this.rdbAvecOral.Location = new System.Drawing.Point(12, 27);
+            this.rdbAvecOral.Name = "rdbAvecOral";
+            this.rdbAvecOral.Size = new System.Drawing.Size(70, 17);
+            this.rdbAvecOral.TabIndex = 0;
+            this.rdbAvecOral.TabStop = true;
+            this.rdbAvecOral.Text = "Avec oral";
+            this.rdbAvecOral.UseVisualStyleBackColor = true;
+            // 
+            // rdbSansOral
+            // 
+            this.rdbSansOral.AutoSize = true;
+            this.rdbSansOral.Location = new System.Drawing.Point(12, 7);
+            this.rdbSansOral.Name = "rdbSansOral";
+            this.rdbSansOral.Size = new System.Drawing.Size(69, 17);
+            this.rdbSansOral.TabIndex = 1;
+            this.rdbSansOral.TabStop = true;
+            this.rdbSansOral.Text = "Sans oral";
+            this.rdbSansOral.UseVisualStyleBackColor = true;
+            // 
             // Principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 519);
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.lblDestination);
@@ -239,11 +310,16 @@
             this.Controls.Add(this.chkLb_Notes);
             this.Controls.Add(this.BtnGénérerStats);
             this.Controls.Add(this.BtnGénérerDiplomes);
+            this.Controls.Add(this.panel1);
             this.Name = "Principal";
             this.Text = "Brevet blanc";
             this.Load += new System.EventHandler(this.Principal_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -269,6 +345,12 @@
         private System.Windows.Forms.Label lblDestination;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.RadioButton rdbDnb1;
+        private System.Windows.Forms.RadioButton rdbDnb2;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.RadioButton rdbSansOral;
+        private System.Windows.Forms.RadioButton rdbAvecOral;
     }
 }
 
