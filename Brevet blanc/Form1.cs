@@ -26,8 +26,8 @@ namespace Brevet_blanc
         private void Principal_Load(object sender, EventArgs e)
         {
             TuerProcessus("Excel");
-            lblSource.Text = @"X:\Logiciels\";
-            lblDestination.Text = @"C:\Users\User\Desktop\";
+            //lblSource.Text = @"X:\Logiciels\";
+            //lblDestination.Text = @"C:\Users\User\Desktop\";
             rdbSansOral.Checked = true;
             rdbDnb1.Checked = true;
             RemplirDatatable(TableNotes, lblSource.Text, "*.xls*", "Recapitulatif", "Notes", "AliasFichierNotes");
