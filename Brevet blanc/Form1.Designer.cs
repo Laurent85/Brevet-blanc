@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Principal));
             this.BtnGénérerDiplomes = new System.Windows.Forms.Button();
             this.BtnGénérerStats = new System.Windows.Forms.Button();
             this.chkLb_Notes = new System.Windows.Forms.CheckedListBox();
@@ -50,8 +51,8 @@
             this.rdbDnb2 = new System.Windows.Forms.RadioButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.rdbAvecOral = new System.Windows.Forms.RadioButton();
             this.rdbSansOral = new System.Windows.Forms.RadioButton();
+            this.rdbAvecOral = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
@@ -217,7 +218,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::Brevet_blanc.Properties.Resources.LOGO_COLLEGE_SAINTJACQUES_GEANT;
+            this.pictureBox1.Image = global::Brevet_blanc.Properties.Resources.LOGO;
             this.pictureBox1.Location = new System.Drawing.Point(12, 9);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(100, 50);
@@ -265,17 +266,6 @@
             this.panel2.Size = new System.Drawing.Size(97, 47);
             this.panel2.TabIndex = 20;
             // 
-            // rdbAvecOral
-            // 
-            this.rdbAvecOral.AutoSize = true;
-            this.rdbAvecOral.Location = new System.Drawing.Point(12, 27);
-            this.rdbAvecOral.Name = "rdbAvecOral";
-            this.rdbAvecOral.Size = new System.Drawing.Size(70, 17);
-            this.rdbAvecOral.TabIndex = 0;
-            this.rdbAvecOral.TabStop = true;
-            this.rdbAvecOral.Text = "Avec oral";
-            this.rdbAvecOral.UseVisualStyleBackColor = true;
-            // 
             // rdbSansOral
             // 
             this.rdbSansOral.AutoSize = true;
@@ -286,6 +276,17 @@
             this.rdbSansOral.TabStop = true;
             this.rdbSansOral.Text = "Sans oral";
             this.rdbSansOral.UseVisualStyleBackColor = true;
+            // 
+            // rdbAvecOral
+            // 
+            this.rdbAvecOral.AutoSize = true;
+            this.rdbAvecOral.Location = new System.Drawing.Point(12, 27);
+            this.rdbAvecOral.Name = "rdbAvecOral";
+            this.rdbAvecOral.Size = new System.Drawing.Size(70, 17);
+            this.rdbAvecOral.TabIndex = 0;
+            this.rdbAvecOral.TabStop = true;
+            this.rdbAvecOral.Text = "Avec oral";
+            this.rdbAvecOral.UseVisualStyleBackColor = true;
             // 
             // Principal
             // 
@@ -311,7 +312,9 @@
             this.Controls.Add(this.BtnGénérerStats);
             this.Controls.Add(this.BtnGénérerDiplomes);
             this.Controls.Add(this.panel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Principal";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Brevet blanc";
             this.Load += new System.EventHandler(this.Principal_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
