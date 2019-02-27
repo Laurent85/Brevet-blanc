@@ -365,13 +365,14 @@ namespace Brevet_blanc
         {
             var fichiersDnbXlsx = Directory.GetFiles(lblDestination.Text + @"DNB\Notes\");
             var fichierStat = lblDestination.Text + @"DNB\Statistiques.xlsx";
-            if (File.Exists(fichierStat)) File.Delete(fichierStat);
-            var assembly = Assembly.GetExecutingAssembly();
-            var input = assembly.GetManifestResourceStream("Brevet_blanc.Resources.Statistiques.xlsx");
-            var output = File.Open(fichierStat, FileMode.CreateNew);
-            CopieFichiersTypeDnb(input, output);
-            input?.Dispose();
-            output.Dispose();
+            if (!File.Exists(fichierStat)){
+                var assembly = Assembly.GetExecutingAssembly();
+                var input = assembly.GetManifestResourceStream("Brevet_blanc.Resources.Statistiques.xlsx");
+                var output = File.Open(fichierStat, FileMode.CreateNew);
+                CopieFichiersTypeDnb(input, output);
+                input?.Dispose();
+                output.Dispose();
+            }
 
             var excelApplication = new Microsoft.Office.Interop.Excel.Application();
             var statXlsx = excelApplication.Workbooks.Open(fichierStat);
@@ -379,12 +380,14 @@ namespace Brevet_blanc
             var statMoyennes = (Worksheet)statXlsx.Sheets.Item[2];
             var statMoyennesControle = (Worksheet)statXlsx.Sheets.Item[3];
             var statListing = (Worksheet)statXlsx.Sheets.Item[4];
+            var statDelta = (Worksheet)statXlsx.Sheets.Item[5];
 
             #region Dnb1SynthèseEtListing
 
             int ligne = 3;
             int ligne1 = 3;
             int ligne2 = 3;
+            int ligne3 = 3;
             int ligneEleve = 2;
             statSynthèse.Range["B4:G13"].Value = 0;
             statMoyennes.Range["B4:I13"].Value = 0;
@@ -392,7 +395,7 @@ namespace Brevet_blanc
             foreach (var file in fichiersDnbXlsx)
             {
                 var fichierDnbXlsx = Path.GetFileName(file);
-                if (fichierDnbXlsx.Contains(NumDnb()) && fichierDnbXlsx.Contains("xlsx"))
+                if (fichierDnbXlsx.Contains("DNB1") && fichierDnbXlsx.Contains("xlsx"))
                 {
                     ligne++;
                     var fichierDnb = lblDestination.Text + @"DNB\Notes\" + fichierDnbXlsx;
@@ -419,21 +422,80 @@ namespace Brevet_blanc
                                 statListing.Range["A" + ligne1].Value =
                                     dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + épreuvesEcrites.Range["A" + ligneEleve].Value.ToString() + " (" + dnbRécapitulatif.Range["AG" + ligneEleve].Value.ToString() + ")";
                                 ligne1++;
+                                int delta = Convert.ToInt32(dnbRécapitulatif.Range["AR" + ligneEleve].Value / 2 -
+                                            dnbRécapitulatif.Range["AE" + ligneEleve].Value);
+                                if ((delta <= numDelta.Value) && (ligne3 <= 31))
+                                {
+                                    statDelta.Range["A" + ligne3].Value =
+                                        dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + dnbRécapitulatif.Range["A" + ligneEleve].Value.ToString() + "  (manque " + delta + " points pour obtention)";
+                                    ligne3++;
+                                }
+                                if ((delta <= numDelta.Value) && (ligne3 > 31))
+                                {
+                                    statDelta.Range["E" + (ligne3-29)].Value =
+                                        dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + dnbRécapitulatif.Range["A" + ligneEleve].Value.ToString() + "  (manque " + delta + " points pour obtention)";
+                                    ligne3++;
+                                }
                             }
                             if (element.Value.ToString().Contains("sans mention"))
                             {
                                 statSynthèse.Range["D" + ligne].Value =
                                     int.Parse(statSynthèse.Range["D" + ligne].Value.ToString()) + 1;
+
+                                int delta = Convert.ToInt32(dnbRécapitulatif.Range["AR" + ligneEleve].Value * 12/20 -
+                                            dnbRécapitulatif.Range["AE" + ligneEleve].Value);
+                                if ((delta <= numDelta.Value) && (ligne3 <= 31))
+                                {
+                                    statDelta.Range["A" + ligne3].Value =
+                                        dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + dnbRécapitulatif.Range["A" + ligneEleve].Value.ToString() + "  (manque " + delta + " points pour mention AB)";
+                                    ligne3++;
+                                }
+                                if ((delta <= numDelta.Value) && (ligne3 > 31))
+                                {
+                                    statDelta.Range["E" + (ligne3 - 29)].Value =
+                                        dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + dnbRécapitulatif.Range["A" + ligneEleve].Value.ToString() + "  (manque " + delta + " points pour mention AB)";
+                                    ligne3++;
+                                }
                             }
                             if (element.Value.ToString().Contains("mention AB"))
                             {
                                 statSynthèse.Range["E" + ligne].Value =
                                     int.Parse(statSynthèse.Range["E" + ligne].Value.ToString()) + 1;
+
+                                int delta = Convert.ToInt32(dnbRécapitulatif.Range["AR" + ligneEleve].Value * 14 / 20 -
+                                            dnbRécapitulatif.Range["AE" + ligneEleve].Value);
+                                if ((delta <= numDelta.Value) && (ligne3 <= 31))
+                                {
+                                    statDelta.Range["A" + ligne3].Value =
+                                        dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + dnbRécapitulatif.Range["A" + ligneEleve].Value.ToString() + "  (manque " + delta + " points pour mention B)";
+                                    ligne3++;
+                                }
+                                if ((delta <= numDelta.Value) && (ligne3 > 31))
+                                {
+                                    statDelta.Range["E" + (ligne3 - 29)].Value =
+                                        dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + dnbRécapitulatif.Range["A" + ligneEleve].Value.ToString() + "  (manque " + delta + " points pour mention B)";
+                                    ligne3++;
+                                }
                             }
                             if (element.Value.ToString().Contains("mention B"))
                             {
                                 statSynthèse.Range["F" + ligne].Value =
                                     int.Parse(statSynthèse.Range["F" + ligne].Value.ToString()) + 1;
+
+                                int delta = Convert.ToInt32(dnbRécapitulatif.Range["AR" + ligneEleve].Value * 16 / 20 -
+                                            dnbRécapitulatif.Range["AE" + ligneEleve].Value);
+                                if ((delta <= numDelta.Value) && (ligne3 <= 31))
+                                {
+                                    statDelta.Range["A" + ligne3].Value =
+                                        dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + dnbRécapitulatif.Range["A" + ligneEleve].Value.ToString() + "  (manque " + delta + " points pour mention TB)";
+                                    ligne3++;
+                                }
+                                if ((delta <= numDelta.Value) && (ligne3 > 31))
+                                {
+                                    statDelta.Range["E" + (ligne3 - 29)].Value =
+                                        dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + dnbRécapitulatif.Range["A" + ligneEleve].Value.ToString() + "  (manque " + delta + " points pour mention TB)";
+                                    ligne3++;
+                                }
                             }
                             if (element.Value.ToString().Contains("mention TB"))
                             {
@@ -489,7 +551,7 @@ namespace Brevet_blanc
             {
                 var fichierDnbXlsx = Path.GetFileName(file);
 
-                if (fichierDnbXlsx.Contains(NumDnb()) && fichierDnbXlsx.Contains("xlsx"))
+                if (fichierDnbXlsx.Contains("DNB1") && fichierDnbXlsx.Contains("xlsx"))
                 {
                     ligne++;
                     var fichierDnb = lblDestination.Text + @"DNB\Notes\" + fichierDnbXlsx;
@@ -542,7 +604,7 @@ namespace Brevet_blanc
             {
                 var fichierDnbXlsx = Path.GetFileName(file);
 
-                if (fichierDnbXlsx.Contains(NumDnb()) && fichierDnbXlsx.Contains("xlsx"))
+                if (fichierDnbXlsx.Contains("DNB1") && fichierDnbXlsx.Contains("xlsx"))
                 {
                     ligne++;
                     var colonne1 = 'C';
