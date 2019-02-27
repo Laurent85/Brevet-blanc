@@ -73,9 +73,9 @@ namespace Brevet_blanc.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap LOGO_COLLEGE_SAINTJACQUES_GEANT {
+        internal static System.Drawing.Bitmap LOGO {
             get {
-                object obj = ResourceManager.GetObject("LOGO COLLEGE SAINTJACQUES GEANT", resourceCulture);
+                object obj = ResourceManager.GetObject("LOGO", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
