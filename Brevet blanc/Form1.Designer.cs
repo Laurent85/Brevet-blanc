@@ -311,7 +311,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::Brevet_blanc.Properties.Resources.LOGO_COLLEGE_SAINTJACQUES_GEANT;
+            this.pictureBox1.Image = global::Brevet_blanc.Properties.Resources.LOGO;
             this.pictureBox1.Location = new System.Drawing.Point(12, 9);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(100, 50);
