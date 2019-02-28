@@ -65,12 +65,13 @@
             // 
             // BtnGénérerDiplomes
             // 
+            this.BtnGénérerDiplomes.BackColor = System.Drawing.Color.Transparent;
             this.BtnGénérerDiplomes.Location = new System.Drawing.Point(634, 274);
             this.BtnGénérerDiplomes.Name = "BtnGénérerDiplomes";
             this.BtnGénérerDiplomes.Size = new System.Drawing.Size(132, 23);
             this.BtnGénérerDiplomes.TabIndex = 0;
             this.BtnGénérerDiplomes.Text = "Générer les diplômes";
-            this.BtnGénérerDiplomes.UseVisualStyleBackColor = true;
+            this.BtnGénérerDiplomes.UseVisualStyleBackColor = false;
             this.BtnGénérerDiplomes.Click += new System.EventHandler(this.BtnGénérerDnb);
             // 
             // BtnGénérerStats
@@ -141,11 +142,11 @@
             // 
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.Transparent;
-            this.label3.Font = new System.Drawing.Font("Script MT Bold", 36F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.ForeColor = System.Drawing.Color.Crimson;
-            this.label3.Location = new System.Drawing.Point(274, 1);
+            this.label3.Font = new System.Drawing.Font("Brush Script MT", 48F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.OliveDrab;
+            this.label3.Location = new System.Drawing.Point(251, 1);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(264, 58);
+            this.label3.Size = new System.Drawing.Size(285, 79);
             this.label3.TabIndex = 7;
             this.label3.Text = "Brevet blanc";
             // 
@@ -202,6 +203,8 @@
             // lblSource
             // 
             this.lblSource.AutoSize = true;
+            this.lblSource.BackColor = System.Drawing.Color.Transparent;
+            this.lblSource.ForeColor = System.Drawing.Color.DeepPink;
             this.lblSource.Location = new System.Drawing.Point(188, 92);
             this.lblSource.Name = "lblSource";
             this.lblSource.Size = new System.Drawing.Size(0, 13);
@@ -210,6 +213,8 @@
             // lblDestination
             // 
             this.lblDestination.AutoSize = true;
+            this.lblDestination.BackColor = System.Drawing.Color.Transparent;
+            this.lblDestination.ForeColor = System.Drawing.Color.DeepPink;
             this.lblDestination.Location = new System.Drawing.Point(188, 122);
             this.lblDestination.Name = "lblDestination";
             this.lblDestination.Size = new System.Drawing.Size(0, 13);
@@ -311,20 +316,22 @@
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Image = global::Brevet_blanc.Properties.Resources.ED;
-            this.pictureBox2.Location = new System.Drawing.Point(706, 9);
+            this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox2.Image = global::Brevet_blanc.Properties.Resources.ED1;
+            this.pictureBox2.Location = new System.Drawing.Point(12, 1);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(82, 59);
+            this.pictureBox2.Size = new System.Drawing.Size(81, 72);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 16;
             this.pictureBox2.TabStop = false;
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::Brevet_blanc.Properties.Resources.LOGO;
-            this.pictureBox1.Location = new System.Drawing.Point(12, 9);
+            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox1.Image = global::Brevet_blanc.Properties.Resources.LOGO1;
+            this.pictureBox1.Location = new System.Drawing.Point(682, 12);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(100, 50);
+            this.pictureBox1.Size = new System.Drawing.Size(109, 61);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 15;
             this.pictureBox1.TabStop = false;

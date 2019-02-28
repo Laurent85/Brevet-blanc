@@ -365,7 +365,8 @@ namespace Brevet_blanc
         {
             var fichiersDnbXlsx = Directory.GetFiles(lblDestination.Text + @"DNB\Notes\");
             var fichierStat = lblDestination.Text + @"DNB\Statistiques.xlsx";
-            if (!File.Exists(fichierStat)){
+            if (!File.Exists(fichierStat))
+            {
                 var assembly = Assembly.GetExecutingAssembly();
                 var input = assembly.GetManifestResourceStream("Brevet_blanc.Resources.Statistiques.xlsx");
                 var output = File.Open(fichierStat, FileMode.CreateNew);
@@ -381,23 +382,36 @@ namespace Brevet_blanc
             var statMoyennesControle = (Worksheet)statXlsx.Sheets.Item[3];
             var statListing = (Worksheet)statXlsx.Sheets.Item[4];
             var statDelta = (Worksheet)statXlsx.Sheets.Item[5];
+            int ligneStatSynthèse = 3;
+            int ligneStatMoyennesEe = 3;
+            int ligneStatMoyennesCc = 3;
+            int ligneStatListingColA = 3;
+            int ligneStatListingColE = 3;
+            int ligneStatDelta = 3;
+            int ligneEleve = 2;
 
             #region Dnb1SynthèseEtListing
 
-            int ligne = 3;
-            int ligne1 = 3;
-            int ligne2 = 3;
-            int ligne3 = 3;
-            int ligneEleve = 2;
             statSynthèse.Range["B4:G13"].Value = 0;
             statMoyennes.Range["B4:I13"].Value = 0;
+
+            for (int i = 3; i < 33; i++)
+            {
+                statDelta.Range["A" + i].Value = "";
+                statDelta.Range["E" + i].Value = "";
+            }
+            for (int i = 3; i < 33; i++)
+            {
+                statListing.Range["A" + i].Value = "";
+                statListing.Range["E" + i].Value = "";
+            }
 
             foreach (var file in fichiersDnbXlsx)
             {
                 var fichierDnbXlsx = Path.GetFileName(file);
                 if (fichierDnbXlsx.Contains("DNB1") && fichierDnbXlsx.Contains("xlsx"))
                 {
-                    ligne++;
+                    ligneStatSynthèse++;
                     var fichierDnb = lblDestination.Text + @"DNB\Notes\" + fichierDnbXlsx;
                     var dnbXlsx = excelApplication.Workbooks.Open(fichierDnb);
                     var dnbRécapitulatif = (Worksheet)dnbXlsx.Sheets.Item[1];
@@ -406,108 +420,112 @@ namespace Brevet_blanc
                     var range = dnbRécapitulatif.Range["AG2:AG50"];
                     var colMoyennes = dnbRécapitulatif.Range["AF2:AF50"];
 
-                    statSynthèse.Range["A" + ligne].Value = dnbRécapitulatif.Range["B2"].Value.ToString();
+                    statSynthèse.Range["A" + ligneStatSynthèse].Value = dnbRécapitulatif.Range["B2"].Value.ToString();
 
                     foreach (Range element in range.Cells)
                     {
                         if (element.Value2 != null)
                         {
-                            statSynthèse.Range["B" + ligne].Value =
-                                    int.Parse(statSynthèse.Range["B" + ligne].Value.ToString()) + 1;
+                            statSynthèse.Range["B" + ligneStatSynthèse].Value =
+                                    int.Parse(statSynthèse.Range["B" + ligneStatSynthèse].Value.ToString()) + 1;
 
                             if (element.Value.ToString().Contains("Non"))
                             {
-                                statSynthèse.Range["C" + ligne].Value =
-                                    int.Parse(statSynthèse.Range["C" + ligne].Value.ToString()) + 1;
-                                statListing.Range["A" + ligne1].Value =
+                                statSynthèse.Range["C" + ligneStatSynthèse].Value =
+                                    int.Parse(statSynthèse.Range["C" + ligneStatSynthèse].Value.ToString()) + 1;
+                                statListing.Range["A" + ligneStatListingColA].Value =
                                     dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + épreuvesEcrites.Range["A" + ligneEleve].Value.ToString() + " (" + dnbRécapitulatif.Range["AG" + ligneEleve].Value.ToString() + ")";
-                                ligne1++;
+                                ligneStatListingColA++;
                                 int delta = Convert.ToInt32(dnbRécapitulatif.Range["AR" + ligneEleve].Value / 2 -
                                             dnbRécapitulatif.Range["AE" + ligneEleve].Value);
-                                if ((delta <= numDelta.Value) && (ligne3 <= 31))
+
+                                if ((delta <= numDelta.Value) && (ligneStatDelta > 31))
                                 {
-                                    statDelta.Range["A" + ligne3].Value =
+                                    statDelta.Range["E" + (ligneStatDelta - 29)].Value =
                                         dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + dnbRécapitulatif.Range["A" + ligneEleve].Value.ToString() + "  (manque " + delta + " points pour obtention)";
-                                    ligne3++;
+                                    ligneStatDelta++;
                                 }
-                                if ((delta <= numDelta.Value) && (ligne3 > 31))
+                                if ((delta <= numDelta.Value) && (ligneStatDelta <= 31))
                                 {
-                                    statDelta.Range["E" + (ligne3-29)].Value =
+                                    statDelta.Range["A" + ligneStatDelta].Value =
                                         dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + dnbRécapitulatif.Range["A" + ligneEleve].Value.ToString() + "  (manque " + delta + " points pour obtention)";
-                                    ligne3++;
+                                    ligneStatDelta++;
                                 }
                             }
                             if (element.Value.ToString().Contains("sans mention"))
                             {
-                                statSynthèse.Range["D" + ligne].Value =
-                                    int.Parse(statSynthèse.Range["D" + ligne].Value.ToString()) + 1;
+                                statSynthèse.Range["D" + ligneStatSynthèse].Value =
+                                    int.Parse(statSynthèse.Range["D" + ligneStatSynthèse].Value.ToString()) + 1;
 
-                                int delta = Convert.ToInt32(dnbRécapitulatif.Range["AR" + ligneEleve].Value * 12/20 -
+                                int delta = Convert.ToInt32(dnbRécapitulatif.Range["AR" + ligneEleve].Value * 12 / 20 -
                                             dnbRécapitulatif.Range["AE" + ligneEleve].Value);
-                                if ((delta <= numDelta.Value) && (ligne3 <= 31))
+
+                                if ((delta <= numDelta.Value) && (ligneStatDelta > 31))
                                 {
-                                    statDelta.Range["A" + ligne3].Value =
+                                    statDelta.Range["E" + (ligneStatDelta - 29)].Value =
                                         dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + dnbRécapitulatif.Range["A" + ligneEleve].Value.ToString() + "  (manque " + delta + " points pour mention AB)";
-                                    ligne3++;
+                                    ligneStatDelta++;
                                 }
-                                if ((delta <= numDelta.Value) && (ligne3 > 31))
+                                if ((delta <= numDelta.Value) && (ligneStatDelta <= 31))
                                 {
-                                    statDelta.Range["E" + (ligne3 - 29)].Value =
+                                    statDelta.Range["A" + ligneStatDelta].Value =
                                         dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + dnbRécapitulatif.Range["A" + ligneEleve].Value.ToString() + "  (manque " + delta + " points pour mention AB)";
-                                    ligne3++;
+                                    ligneStatDelta++;
                                 }
                             }
                             if (element.Value.ToString().Contains("mention AB"))
                             {
-                                statSynthèse.Range["E" + ligne].Value =
-                                    int.Parse(statSynthèse.Range["E" + ligne].Value.ToString()) + 1;
+                                statSynthèse.Range["E" + ligneStatSynthèse].Value =
+                                    int.Parse(statSynthèse.Range["E" + ligneStatSynthèse].Value.ToString()) + 1;
 
                                 int delta = Convert.ToInt32(dnbRécapitulatif.Range["AR" + ligneEleve].Value * 14 / 20 -
                                             dnbRécapitulatif.Range["AE" + ligneEleve].Value);
-                                if ((delta <= numDelta.Value) && (ligne3 <= 31))
+
+                                if ((delta <= numDelta.Value) && (ligneStatDelta > 31))
                                 {
-                                    statDelta.Range["A" + ligne3].Value =
+                                    statDelta.Range["E" + (ligneStatDelta - 29)].Value =
                                         dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + dnbRécapitulatif.Range["A" + ligneEleve].Value.ToString() + "  (manque " + delta + " points pour mention B)";
-                                    ligne3++;
+                                    ligneStatDelta++;
                                 }
-                                if ((delta <= numDelta.Value) && (ligne3 > 31))
+                                if ((delta <= numDelta.Value) && (ligneStatDelta <= 31))
                                 {
-                                    statDelta.Range["E" + (ligne3 - 29)].Value =
+                                    statDelta.Range["A" + ligneStatDelta].Value =
                                         dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + dnbRécapitulatif.Range["A" + ligneEleve].Value.ToString() + "  (manque " + delta + " points pour mention B)";
-                                    ligne3++;
+                                    ligneStatDelta++;
                                 }
                             }
                             if (element.Value.ToString().Contains("mention B"))
                             {
-                                statSynthèse.Range["F" + ligne].Value =
-                                    int.Parse(statSynthèse.Range["F" + ligne].Value.ToString()) + 1;
+                                statSynthèse.Range["F" + ligneStatSynthèse].Value =
+                                    int.Parse(statSynthèse.Range["F" + ligneStatSynthèse].Value.ToString()) + 1;
 
                                 int delta = Convert.ToInt32(dnbRécapitulatif.Range["AR" + ligneEleve].Value * 16 / 20 -
                                             dnbRécapitulatif.Range["AE" + ligneEleve].Value);
-                                if ((delta <= numDelta.Value) && (ligne3 <= 31))
+
+                                if ((delta <= numDelta.Value) && (ligneStatDelta > 31))
                                 {
-                                    statDelta.Range["A" + ligne3].Value =
+                                    statDelta.Range["E" + (ligneStatDelta - 29)].Value =
                                         dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + dnbRécapitulatif.Range["A" + ligneEleve].Value.ToString() + "  (manque " + delta + " points pour mention TB)";
-                                    ligne3++;
+                                    ligneStatDelta++;
                                 }
-                                if ((delta <= numDelta.Value) && (ligne3 > 31))
+                                if ((delta <= numDelta.Value) && (ligneStatDelta <= 31))
                                 {
-                                    statDelta.Range["E" + (ligne3 - 29)].Value =
+                                    statDelta.Range["A" + ligneStatDelta].Value =
                                         dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + dnbRécapitulatif.Range["A" + ligneEleve].Value.ToString() + "  (manque " + delta + " points pour mention TB)";
-                                    ligne3++;
+                                    ligneStatDelta++;
                                 }
                             }
                             if (element.Value.ToString().Contains("mention TB"))
                             {
-                                statSynthèse.Range["G" + ligne].Value =
-                                    int.Parse(statSynthèse.Range["G" + ligne].Value.ToString()) + 1;
-                                statListing.Range["E" + ligne2].Value =
+                                statSynthèse.Range["G" + ligneStatSynthèse].Value =
+                                    int.Parse(statSynthèse.Range["G" + ligneStatSynthèse].Value.ToString()) + 1;
+                                statListing.Range["E" + ligneStatListingColE].Value =
                                     dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + dnbRécapitulatif.Range["A" + ligneEleve].Value.ToString() + " (" + dnbRécapitulatif.Range["AE" + ligneEleve].Value.ToString() + " / " + dnbRécapitulatif.Range["AR" + ligneEleve].Value.ToString() + ")";
-                                ligne2++;
+                                ligneStatListingColE++;
                             }
 
-                            statSynthèse.Range["H" + ligne].Formula = "=SUM(D" + ligne + ":G" + ligne + ")";
-                            statSynthèse.Range["I" + ligne].Formula = "=H" + ligne + "/B" + ligne;
+                            statSynthèse.Range["H" + ligneStatSynthèse].Formula = "=SUM(D" + ligneStatSynthèse + ":G" + ligneStatSynthèse + ")";
+                            statSynthèse.Range["I" + ligneStatSynthèse].Formula = "=H" + ligneStatSynthèse + "/B" + ligneStatSynthèse;
                         }
                         if (ligneEleve == 50) ligneEleve = 2;
                         else
@@ -523,29 +541,28 @@ namespace Brevet_blanc
                             compteur++;
                         }
                     }
-                    statSynthèse.Range["J" + ligne].Value = total / compteur;
+                    statSynthèse.Range["J" + ligneStatSynthèse].Value = total / compteur;
                     dnbXlsx.Close();
                 }
             }
-            var range1 = statSynthèse.Range["A" + (ligne + 1), "I13"];
+            var range1 = statSynthèse.Range["A" + (ligneStatSynthèse + 1), "I13"];
             range1.Value = "";
-            statSynthèse.Range["A" + (ligne + 2)].Value = "Niveau";
+            statSynthèse.Range["A" + (ligneStatSynthèse + 2)].Value = "Niveau";
+            statDelta.Range["A2"].Value = ligneStatDelta - 3 + " élèves nécessitant discussion";
 
             var colonne = 'B';
             for (int i = 1; i < 8; i++)
             {
-                statSynthèse.Range[colonne.ToString() + (ligne + 2)].Formula = "=SUM(" + colonne + "4:" + colonne + ligne + ")";
+                statSynthèse.Range[colonne.ToString() + (ligneStatSynthèse + 2)].Formula = "=SUM(" + colonne + "4:" + colonne + ligneStatSynthèse + ")";
                 colonne++;
             }
 
-            statSynthèse.Range["I" + (ligne + 2)].Formula = "=H" + (ligne + 2) + "/B" + (ligne + 2);
-            statSynthèse.Range["J" + (ligne + 2)].Formula = "=AVERAGE(J4:J" + ligne;
+            statSynthèse.Range["I" + (ligneStatSynthèse + 2)].Formula = "=H" + (ligneStatSynthèse + 2) + "/B" + (ligneStatSynthèse + 2);
+            statSynthèse.Range["J" + (ligneStatSynthèse + 2)].Formula = "=AVERAGE(J4:J" + ligneStatSynthèse;
 
             #endregion Dnb1SynthèseEtListing
 
             #region Dnb1MoyennesEpreuves
-
-            ligne = 3;
 
             foreach (var file in fichiersDnbXlsx)
             {
@@ -553,13 +570,13 @@ namespace Brevet_blanc
 
                 if (fichierDnbXlsx.Contains("DNB1") && fichierDnbXlsx.Contains("xlsx"))
                 {
-                    ligne++;
+                    ligneStatMoyennesEe++;
                     var fichierDnb = lblDestination.Text + @"DNB\Notes\" + fichierDnbXlsx;
                     var dnbXlsx = excelApplication.Workbooks.Open(fichierDnb);
                     var dnbEpreuvesEcrites = (Worksheet)dnbXlsx.Sheets.Item[2];
-                    statMoyennes.Range["A" + ligne].Value = ((Worksheet)dnbXlsx.Sheets.Item[1]).Range["B2"].Value.ToString(); //classe
-                    statMoyennes.Range["I" + ligne].Value = ""; //oral
-                    int effectif = int.Parse(statSynthèse.Range["B" + ligne.ToString()].Value.ToString()); //effectif
+                    statMoyennes.Range["A" + ligneStatMoyennesEe].Value = ((Worksheet)dnbXlsx.Sheets.Item[1]).Range["B2"].Value.ToString(); //classe
+                    statMoyennes.Range["I" + ligneStatMoyennesEe].Value = ""; //oral
+                    int effectif = int.Parse(statSynthèse.Range["B" + ligneStatMoyennesEe.ToString()].Value.ToString()); //effectif
                     colonne = 'B';
                     for (int i = 1; i < 8; i++)
                     {
@@ -567,38 +584,36 @@ namespace Brevet_blanc
 
                         dnbEpreuvesEcrites.Range[colonne.ToString() + (effectif + 3)].Formula = "=AVERAGE(" + colonne.ToString() + "2:" + colonne.ToString() + (effectif + 2) + ")";
 
-                        statMoyennes.Range[colonne.ToString() + ligne].Value = Math.Round(
+                        statMoyennes.Range[colonne.ToString() + ligneStatMoyennesEe].Value = Math.Round(
                             float.Parse(dnbEpreuvesEcrites.Range[colonne.ToString() + (effectif + 3)].Value.ToString()) / barême * 20, 2);
 
                         colonne++;
                     }
                     dnbEpreuvesEcrites.Range["J" + (effectif + 3)].Formula = "=AVERAGE(B" + (effectif + 3) + ":H" + (effectif + 3) + ")";
-                    statMoyennes.Range["J" + ligne].Value = Math.Round(float.Parse(dnbEpreuvesEcrites.Range["J" + (effectif + 3)].Value.ToString()), 2);
+                    statMoyennes.Range["J" + ligneStatMoyennesEe].Value = Math.Round(float.Parse(dnbEpreuvesEcrites.Range["J" + (effectif + 3)].Value.ToString()), 2);
 
                     object misValue = Missing.Value;
                     dnbXlsx.Close(false, misValue, misValue);
                 }
             }
 
-            var range3 = statMoyennes.Range["A" + (ligne + 1), "J13"];
+            var range3 = statMoyennes.Range["A" + (ligneStatMoyennesEe + 1), "J13"];
             range3.Value = "";
 
             statMoyennes.Range["A1"].Value = "Année scolaire 2018-2019";
-            statMoyennes.Range["A" + (ligne + 2)].Value = "Niveau";
+            statMoyennes.Range["A" + (ligneStatMoyennesEe + 2)].Value = "Niveau";
 
             colonne = 'B';
             for (int i = 1; i < 8; i++)
             {
-                statMoyennes.Range[colonne.ToString() + (ligne + 2)].Formula = "=AVERAGE(" + colonne + "4:" + colonne + ligne + ")";
+                statMoyennes.Range[colonne.ToString() + (ligneStatMoyennesEe + 2)].Formula = "=AVERAGE(" + colonne + "4:" + colonne + ligneStatMoyennesEe + ")";
                 colonne++;
             }
-            statMoyennes.Range["J" + (ligne + 2)].Formula = "=AVERAGE(J4:J" + ligne + ")";
+            statMoyennes.Range["J" + (ligneStatMoyennesEe + 2)].Formula = "=AVERAGE(J4:J" + ligneStatMoyennesEe + ")";
 
             #endregion Dnb1MoyennesEpreuves
 
             #region Dnb1MoyennesControleContinu
-
-            ligne = 3;
 
             foreach (var file in fichiersDnbXlsx)
             {
@@ -606,15 +621,15 @@ namespace Brevet_blanc
 
                 if (fichierDnbXlsx.Contains("DNB1") && fichierDnbXlsx.Contains("xlsx"))
                 {
-                    ligne++;
+                    ligneStatMoyennesCc++;
                     var colonne1 = 'C';
                     var fichierDnb = lblDestination.Text + @"DNB\Notes\" + fichierDnbXlsx;
                     var dnbXlsx = excelApplication.Workbooks.Open(fichierDnb);
                     //var dnbEpreuvesEcrites = (Worksheet)dnbXlsx.Sheets.Item[2];
                     var dnbRécapitulatif = (Worksheet)dnbXlsx.Sheets.Item[1];
-                    statMoyennesControle.Range["A" + ligne].Value = ((Worksheet)dnbXlsx.Sheets.Item[1]).Range["B2"].Value.ToString();
-                    statMoyennesControle.Range["I" + ligne].Value = "";
-                    int effectif = int.Parse(statSynthèse.Range["B" + ligne.ToString()].Value.ToString());
+                    statMoyennesControle.Range["A" + ligneStatMoyennesCc].Value = ((Worksheet)dnbXlsx.Sheets.Item[1]).Range["B2"].Value.ToString();
+                    statMoyennesControle.Range["I" + ligneStatMoyennesCc].Value = "";
+                    int effectif = int.Parse(statSynthèse.Range["B" + ligneStatMoyennesCc.ToString()].Value.ToString());
                     colonne = 'B';
                     for (int i = 1; i < 9; i++)
                     {
@@ -625,30 +640,30 @@ namespace Brevet_blanc
                                 somme = somme + float.Parse(dnbRécapitulatif.Range[colonne1.ToString() + j].Value.ToString());
                         }
 
-                        statMoyennesControle.Range[colonne.ToString() + ligne].Value = somme / effectif;
+                        statMoyennesControle.Range[colonne.ToString() + ligneStatMoyennesCc].Value = somme / effectif;
 
                         colonne++;
                         colonne1++;
                     }
 
-                    statMoyennesControle.Range["J" + ligne].Formula = "=AVERAGE(B" + ligne + ":I" + ligne;
+                    statMoyennesControle.Range["J" + ligneStatMoyennesCc].Formula = "=AVERAGE(B" + ligneStatMoyennesCc + ":I" + ligneStatMoyennesCc;
                     dnbXlsx.Close();
                 }
             }
 
-            var range5 = statMoyennesControle.Range["A" + (ligne + 1), "J13"];
+            var range5 = statMoyennesControle.Range["A" + (ligneStatMoyennesCc + 1), "J13"];
             range5.Value = "";
 
             statMoyennesControle.Range["A1"].Value = "Année scolaire 2018-2019";
-            statMoyennesControle.Range["A" + (ligne + 2)].Value = "Niveau";
+            statMoyennesControle.Range["A" + (ligneStatMoyennesCc + 2)].Value = "Niveau";
 
             colonne = 'B';
             for (int i = 1; i < 9; i++)
             {
-                statMoyennesControle.Range[colonne.ToString() + (ligne + 2)].Formula = "=AVERAGE(" + colonne + "4:" + colonne + ligne + ")";
+                statMoyennesControle.Range[colonne.ToString() + (ligneStatMoyennesCc + 2)].Formula = "=AVERAGE(" + colonne + "4:" + colonne + ligneStatMoyennesCc + ")";
                 colonne++;
             }
-            statMoyennesControle.Range["J" + (ligne + 2)].Formula = "=AVERAGE(J4:J" + ligne + ")";
+            statMoyennesControle.Range["J" + (ligneStatMoyennesCc + 2)].Formula = "=AVERAGE(J4:J" + ligneStatMoyennesCc + ")";
 
             #endregion Dnb1MoyennesControleContinu
 
