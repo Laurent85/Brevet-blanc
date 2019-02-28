@@ -399,13 +399,10 @@ namespace Brevet_blanc
             {
                 statDelta.Range["A" + i].Value = "";
                 statDelta.Range["E" + i].Value = "";
-            }
-            for (int i = 3; i < 33; i++)
-            {
                 statListing.Range["A" + i].Value = "";
                 statListing.Range["E" + i].Value = "";
             }
-
+            
             foreach (var file in fichiersDnbXlsx)
             {
                 var fichierDnbXlsx = Path.GetFileName(file);

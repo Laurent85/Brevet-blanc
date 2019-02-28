@@ -63,16 +63,6 @@ namespace Brevet_blanc.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap ED {
-            get {
-                object obj = ResourceManager.GetObject("ED", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap ED1 {
             get {
                 object obj = ResourceManager.GetObject("ED1", resourceCulture);
@@ -86,16 +76,6 @@ namespace Brevet_blanc.Properties {
         internal static System.Drawing.Bitmap Fond {
             get {
                 object obj = ResourceManager.GetObject("Fond", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap LOGO {
-            get {
-                object obj = ResourceManager.GetObject("LOGO", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -117,16 +97,6 @@ namespace Brevet_blanc.Properties {
             get {
                 object obj = ResourceManager.GetObject("Publipostage", resourceCulture);
                 return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Sigle {
-            get {
-                object obj = ResourceManager.GetObject("Sigle", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

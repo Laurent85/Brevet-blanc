@@ -276,6 +276,7 @@
             // rdbAvecOral
             // 
             this.rdbAvecOral.AutoSize = true;
+            this.rdbAvecOral.Enabled = false;
             this.rdbAvecOral.Location = new System.Drawing.Point(12, 27);
             this.rdbAvecOral.Name = "rdbAvecOral";
             this.rdbAvecOral.Size = new System.Drawing.Size(70, 17);
@@ -318,9 +319,9 @@
             // 
             this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox2.Image = global::Brevet_blanc.Properties.Resources.ED1;
-            this.pictureBox2.Location = new System.Drawing.Point(12, 1);
+            this.pictureBox2.Location = new System.Drawing.Point(697, 32);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(81, 72);
+            this.pictureBox2.Size = new System.Drawing.Size(69, 57);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 16;
             this.pictureBox2.TabStop = false;
@@ -329,7 +330,7 @@
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox1.Image = global::Brevet_blanc.Properties.Resources.LOGO1;
-            this.pictureBox1.Location = new System.Drawing.Point(682, 12);
+            this.pictureBox1.Location = new System.Drawing.Point(12, 12);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(109, 61);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
