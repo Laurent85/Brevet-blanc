@@ -48,8 +48,8 @@
             this.rdbDnb2 = new System.Windows.Forms.RadioButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.rdbAvecOral = new System.Windows.Forms.RadioButton();
             this.rdbSansOral = new System.Windows.Forms.RadioButton();
+            this.rdbAvecOral = new System.Windows.Forms.RadioButton();
             this.numDelta = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
@@ -65,7 +65,7 @@
             // 
             // BtnGénérerDiplomes
             // 
-            this.BtnGénérerDiplomes.Location = new System.Drawing.Point(631, 208);
+            this.BtnGénérerDiplomes.Location = new System.Drawing.Point(634, 274);
             this.BtnGénérerDiplomes.Name = "BtnGénérerDiplomes";
             this.BtnGénérerDiplomes.Size = new System.Drawing.Size(132, 23);
             this.BtnGénérerDiplomes.TabIndex = 0;
@@ -75,7 +75,7 @@
             // 
             // BtnGénérerStats
             // 
-            this.BtnGénérerStats.Location = new System.Drawing.Point(631, 249);
+            this.BtnGénérerStats.Location = new System.Drawing.Point(634, 315);
             this.BtnGénérerStats.Name = "BtnGénérerStats";
             this.BtnGénérerStats.Size = new System.Drawing.Size(132, 23);
             this.BtnGénérerStats.TabIndex = 1;
@@ -85,6 +85,7 @@
             // 
             // chkLb_Notes
             // 
+            this.chkLb_Notes.BackColor = System.Drawing.Color.Linen;
             this.chkLb_Notes.CheckOnClick = true;
             this.chkLb_Notes.FormattingEnabled = true;
             this.chkLb_Notes.Location = new System.Drawing.Point(45, 208);
@@ -94,6 +95,7 @@
             // 
             // chkLb_Composantes
             // 
+            this.chkLb_Composantes.BackColor = System.Drawing.Color.Linen;
             this.chkLb_Composantes.CheckOnClick = true;
             this.chkLb_Composantes.FormattingEnabled = true;
             this.chkLb_Composantes.Location = new System.Drawing.Point(319, 208);
@@ -114,9 +116,10 @@
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.Blue;
-            this.label1.Location = new System.Drawing.Point(62, 167);
+            this.label1.Location = new System.Drawing.Point(82, 167);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(167, 24);
             this.label1.TabIndex = 5;
@@ -125,9 +128,10 @@
             // label2
             // 
             this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.Blue;
-            this.label2.Location = new System.Drawing.Point(341, 167);
+            this.label2.Location = new System.Drawing.Point(359, 167);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(164, 24);
             this.label2.TabIndex = 6;
@@ -136,11 +140,12 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.BackColor = System.Drawing.Color.Transparent;
+            this.label3.Font = new System.Drawing.Font("Script MT Bold", 36F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.Crimson;
-            this.label3.Location = new System.Drawing.Point(297, 9);
+            this.label3.Location = new System.Drawing.Point(274, 1);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(189, 33);
+            this.label3.Size = new System.Drawing.Size(264, 58);
             this.label3.TabIndex = 7;
             this.label3.Text = "Brevet blanc";
             // 
@@ -153,7 +158,7 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(631, 339);
+            this.progressBar1.Location = new System.Drawing.Point(634, 405);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(132, 23);
             this.progressBar1.TabIndex = 8;
@@ -161,7 +166,7 @@
             // lblCompteur
             // 
             this.lblCompteur.AutoSize = true;
-            this.lblCompteur.Location = new System.Drawing.Point(631, 377);
+            this.lblCompteur.Location = new System.Drawing.Point(634, 443);
             this.lblCompteur.Name = "lblCompteur";
             this.lblCompteur.Size = new System.Drawing.Size(0, 13);
             this.lblCompteur.TabIndex = 9;
@@ -169,7 +174,7 @@
             // lblClasse
             // 
             this.lblClasse.AutoSize = true;
-            this.lblClasse.Location = new System.Drawing.Point(631, 304);
+            this.lblClasse.Location = new System.Drawing.Point(634, 370);
             this.lblClasse.Name = "lblClasse";
             this.lblClasse.Size = new System.Drawing.Size(0, 13);
             this.lblClasse.TabIndex = 10;
@@ -234,32 +239,23 @@
             // 
             // panel1
             // 
+            this.panel1.BackColor = System.Drawing.Color.Transparent;
             this.panel1.Controls.Add(this.rdbDnb1);
             this.panel1.Controls.Add(this.rdbDnb2);
-            this.panel1.Location = new System.Drawing.Point(589, 144);
+            this.panel1.Location = new System.Drawing.Point(592, 210);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(94, 47);
             this.panel1.TabIndex = 19;
             // 
             // panel2
             // 
+            this.panel2.BackColor = System.Drawing.Color.Transparent;
             this.panel2.Controls.Add(this.rdbSansOral);
             this.panel2.Controls.Add(this.rdbAvecOral);
-            this.panel2.Location = new System.Drawing.Point(691, 144);
+            this.panel2.Location = new System.Drawing.Point(694, 210);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(97, 47);
             this.panel2.TabIndex = 20;
-            // 
-            // rdbAvecOral
-            // 
-            this.rdbAvecOral.AutoSize = true;
-            this.rdbAvecOral.Location = new System.Drawing.Point(12, 27);
-            this.rdbAvecOral.Name = "rdbAvecOral";
-            this.rdbAvecOral.Size = new System.Drawing.Size(70, 17);
-            this.rdbAvecOral.TabIndex = 0;
-            this.rdbAvecOral.TabStop = true;
-            this.rdbAvecOral.Text = "Avec oral";
-            this.rdbAvecOral.UseVisualStyleBackColor = true;
             // 
             // rdbSansOral
             // 
@@ -272,9 +268,21 @@
             this.rdbSansOral.Text = "Sans oral";
             this.rdbSansOral.UseVisualStyleBackColor = true;
             // 
+            // rdbAvecOral
+            // 
+            this.rdbAvecOral.AutoSize = true;
+            this.rdbAvecOral.Location = new System.Drawing.Point(12, 27);
+            this.rdbAvecOral.Name = "rdbAvecOral";
+            this.rdbAvecOral.Size = new System.Drawing.Size(70, 17);
+            this.rdbAvecOral.TabIndex = 0;
+            this.rdbAvecOral.TabStop = true;
+            this.rdbAvecOral.Text = "Avec oral";
+            this.rdbAvecOral.UseVisualStyleBackColor = true;
+            // 
             // numDelta
             // 
-            this.numDelta.Location = new System.Drawing.Point(688, 117);
+            this.numDelta.BackColor = System.Drawing.Color.Linen;
+            this.numDelta.Location = new System.Drawing.Point(694, 173);
             this.numDelta.Name = "numDelta";
             this.numDelta.Size = new System.Drawing.Size(47, 20);
             this.numDelta.TabIndex = 21;
@@ -283,7 +291,8 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(631, 119);
+            this.label4.BackColor = System.Drawing.Color.Transparent;
+            this.label4.Location = new System.Drawing.Point(637, 175);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(32, 13);
             this.label4.TabIndex = 23;
@@ -291,8 +300,9 @@
             // 
             // pictureBox3
             // 
+            this.pictureBox3.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox3.Image = global::Brevet_blanc.Properties.Resources.Sigle1;
-            this.pictureBox3.Location = new System.Drawing.Point(663, 119);
+            this.pictureBox3.Location = new System.Drawing.Point(669, 175);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(20, 13);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -302,9 +312,9 @@
             // pictureBox2
             // 
             this.pictureBox2.Image = global::Brevet_blanc.Properties.Resources.ED;
-            this.pictureBox2.Location = new System.Drawing.Point(688, 9);
+            this.pictureBox2.Location = new System.Drawing.Point(706, 9);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(100, 69);
+            this.pictureBox2.Size = new System.Drawing.Size(82, 59);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 16;
             this.pictureBox2.TabStop = false;
@@ -323,6 +333,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
+            this.BackgroundImage = global::Brevet_blanc.Properties.Resources.Fond;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(800, 519);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.pictureBox3);
@@ -346,7 +359,9 @@
             this.Controls.Add(this.BtnGénérerStats);
             this.Controls.Add(this.BtnGénérerDiplomes);
             this.Controls.Add(this.panel1);
+            this.DoubleBuffered = true;
             this.Name = "Principal";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Brevet blanc";
             this.Load += new System.EventHandler(this.Principal_Load);
             this.panel1.ResumeLayout(false);
