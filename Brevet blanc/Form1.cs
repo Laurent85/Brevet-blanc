@@ -26,8 +26,8 @@ namespace Brevet_blanc
         private void Principal_Load(object sender, EventArgs e)
         {
             TuerProcessus("Excel");
-            //lblSource.Text = @"X:\Logiciels\";
-            //lblDestination.Text = @"C:\Users\User\Desktop\";
+            lblSource.Text = @"X:\Logiciels\";
+            lblDestination.Text = @"C:\Users\User\Desktop\";
             rdbSansOral.Checked = true;
             rdbDnb1.Checked = true;
             RemplirDatatable(TableNotes, lblSource.Text, "*.xls*", "Recapitulatif", "Notes", "AliasFichierNotes");
@@ -382,18 +382,38 @@ namespace Brevet_blanc
             var statMoyennesControle = (Worksheet)statXlsx.Sheets.Item[3];
             var statListing = (Worksheet)statXlsx.Sheets.Item[4];
             var statDelta = (Worksheet)statXlsx.Sheets.Item[5];
+            var statListing2 = (Worksheet)statXlsx.Sheets.Item[6];
+            var statDelta2 = (Worksheet)statXlsx.Sheets.Item[7];
+            int nombreClasses = 0;
             int ligneStatSynthèse = 3;
+            int ligneStatSynthèseDébut = 0;
             int ligneStatMoyennesEe = 3;
+            int ligneStatMoyennesEeDébut = 0;
             int ligneStatMoyennesCc = 3;
+            int ligneStatMoyennesCcDébut = 0;
             int ligneStatListingColA = 3;
             int ligneStatListingColE = 3;
             int ligneStatDelta = 3;
             int ligneEleve = 2;
 
-            #region Dnb1SynthèseEtListing
+            if (rdbDnb1.Checked)
+            {
+                ligneStatSynthèse = 3;
+                ligneStatMoyennesEe = 3;
+                ligneStatMoyennesCc = 3;
+                //statSynthèse.Range["B" + (ligneStatSynthèse + 1) + ":G" + (ligneStatSynthèse + 10)].Value = 0;
+                //statMoyennes.Range["B" + (ligneStatMoyennesEe + 1) + ":G" + (ligneStatMoyennesEe + 10)].Value = 0;
+            }
+            if (rdbDnb2.Checked)
+            {
+                ligneStatSynthèse = 15;
+                ligneStatMoyennesEe = 15;
+                ligneStatMoyennesCc = 15;
+                //statSynthèse.Range["B" + (ligneStatSynthèse + 1) + ":G" + (ligneStatSynthèse + 10)].Value = 0;
+                //statMoyennes.Range["B" + (ligneStatMoyennesEe + 1) + ":G" + (ligneStatMoyennesEe + 10)].Value = 0;
+            }
 
-            statSynthèse.Range["B4:G13"].Value = 0;
-            statMoyennes.Range["B4:I13"].Value = 0;
+            #region Dnb1SynthèseEtListing
 
             for (int i = 3; i < 33; i++)
             {
@@ -402,12 +422,17 @@ namespace Brevet_blanc
                 statListing.Range["A" + i].Value = "";
                 statListing.Range["E" + i].Value = "";
             }
-            
+
             foreach (var file in fichiersDnbXlsx)
             {
                 var fichierDnbXlsx = Path.GetFileName(file);
-                if (fichierDnbXlsx.Contains("DNB1") && fichierDnbXlsx.Contains("xlsx"))
+                if (fichierDnbXlsx.Contains(NumDnb()) && fichierDnbXlsx.Contains("xlsx"))
                 {
+                    if ((ligneStatSynthèse == 3) || (ligneStatSynthèse == 15))
+                    {
+                        statSynthèse.Range["B" + (ligneStatSynthèse + 1) + ":G" + (ligneStatSynthèse + 10)].Value = 0;
+                        ligneStatSynthèseDébut = ligneStatSynthèse;
+                    }
                     ligneStatSynthèse++;
                     var fichierDnb = lblDestination.Text + @"DNB\Notes\" + fichierDnbXlsx;
                     var dnbXlsx = excelApplication.Workbooks.Open(fichierDnb);
@@ -540,22 +565,44 @@ namespace Brevet_blanc
                     }
                     statSynthèse.Range["J" + ligneStatSynthèse].Value = total / compteur;
                     dnbXlsx.Close();
+                    nombreClasses++;
                 }
             }
-            var range1 = statSynthèse.Range["A" + (ligneStatSynthèse + 1), "I13"];
-            range1.Value = "";
-            statSynthèse.Range["A" + (ligneStatSynthèse + 2)].Value = "Niveau";
-            statDelta.Range["A2"].Value = ligneStatDelta - 3 + " élèves nécessitant discussion";
-
             var colonne = 'B';
-            for (int i = 1; i < 8; i++)
-            {
-                statSynthèse.Range[colonne.ToString() + (ligneStatSynthèse + 2)].Formula = "=SUM(" + colonne + "4:" + colonne + ligneStatSynthèse + ")";
-                colonne++;
-            }
 
-            statSynthèse.Range["I" + (ligneStatSynthèse + 2)].Formula = "=H" + (ligneStatSynthèse + 2) + "/B" + (ligneStatSynthèse + 2);
-            statSynthèse.Range["J" + (ligneStatSynthèse + 2)].Formula = "=AVERAGE(J4:J" + ligneStatSynthèse;
+            var range1 = statSynthèse.Range["A1:A1"];
+            if (ligneStatSynthèse < 15)
+            {
+                range1 = statSynthèse.Range["A" + (ligneStatSynthèse + 1),
+                     "J13"];
+            }
+            if (ligneStatSynthèse > 15)
+            {
+                range1 = statSynthèse.Range["A" + (ligneStatSynthèse + 1),
+                     "J25"];
+            }
+            if ((ligneStatSynthèse == 3) || (ligneStatSynthèse == 15))
+            {
+                statSynthèse.Range["A" + (ligneStatSynthèse + 1), "J" + (ligneStatSynthèse + 10)].Value = "";
+            }
+            else range1.Value = "";
+
+            if (nombreClasses > 0)
+            {
+                statSynthèse.Range["A" + (ligneStatSynthèse + 2)].Value = "Niveau";
+                statDelta.Range["A2"].Value = ligneStatDelta - 3 + " élèves nécessitant discussion";
+
+                for (int i = 1; i < 8; i++)
+                {
+                    statSynthèse.Range[colonne.ToString() + (ligneStatSynthèse + 2)].Formula =
+                        "=SUM(" + colonne + ligneStatSynthèseDébut + ":" + colonne + ligneStatSynthèse + ")";
+                    colonne++;
+                }
+
+                statSynthèse.Range["I" + (ligneStatSynthèse + 2)].Formula =
+                    "=H" + (ligneStatSynthèse + 2) + "/B" + (ligneStatSynthèse + 2);
+                statSynthèse.Range["J" + (ligneStatSynthèse + 2)].Formula = "=AVERAGE(J" + ligneStatSynthèseDébut + ":J" + ligneStatSynthèse;
+            }
 
             #endregion Dnb1SynthèseEtListing
 
@@ -565,8 +612,13 @@ namespace Brevet_blanc
             {
                 var fichierDnbXlsx = Path.GetFileName(file);
 
-                if (fichierDnbXlsx.Contains("DNB1") && fichierDnbXlsx.Contains("xlsx"))
+                if (fichierDnbXlsx.Contains(NumDnb()) && fichierDnbXlsx.Contains("xlsx"))
                 {
+                    if ((ligneStatMoyennesEe == 3) || (ligneStatMoyennesEe == 15))
+                    {
+                        statMoyennes.Range["B" + (ligneStatMoyennesEe + 1) + ":G" + (ligneStatMoyennesEe + 10)].Value = 0;
+                        ligneStatMoyennesEeDébut = ligneStatMoyennesEe;
+                    }
                     ligneStatMoyennesEe++;
                     var fichierDnb = lblDestination.Text + @"DNB\Notes\" + fichierDnbXlsx;
                     var dnbXlsx = excelApplication.Workbooks.Open(fichierDnb);
@@ -594,19 +646,38 @@ namespace Brevet_blanc
                 }
             }
 
-            var range3 = statMoyennes.Range["A" + (ligneStatMoyennesEe + 1), "J13"];
-            range3.Value = "";
-
-            statMoyennes.Range["A1"].Value = "Année scolaire 2018-2019";
-            statMoyennes.Range["A" + (ligneStatMoyennesEe + 2)].Value = "Niveau";
-
-            colonne = 'B';
-            for (int i = 1; i < 8; i++)
+            var range3 = statMoyennes.Range["A1:A1"];
+            if (ligneStatMoyennesEe < 15)
             {
-                statMoyennes.Range[colonne.ToString() + (ligneStatMoyennesEe + 2)].Formula = "=AVERAGE(" + colonne + "4:" + colonne + ligneStatMoyennesEe + ")";
-                colonne++;
+                range3 = statMoyennes.Range["A" + (ligneStatMoyennesEe + 1),
+                     "J13"];
             }
-            statMoyennes.Range["J" + (ligneStatMoyennesEe + 2)].Formula = "=AVERAGE(J4:J" + ligneStatMoyennesEe + ")";
+            if (ligneStatMoyennesEe > 15)
+            {
+                range3 = statMoyennes.Range["A" + (ligneStatMoyennesEe + 1),
+                     "J25"];
+            }
+            if ((ligneStatMoyennesEe == 3) || (ligneStatMoyennesEe == 15))
+            {
+                statMoyennes.Range["A" + (ligneStatMoyennesEe + 1), "J" + (ligneStatMoyennesEe + 10)].Value = "";
+            }
+            else range3.Value = "";
+
+            if (nombreClasses > 0)
+            {
+                statMoyennes.Range["A1"].Value = "Année scolaire 2018-2019";
+                statMoyennes.Range["A" + (ligneStatMoyennesEe + 2)].Value = "Niveau";
+
+                colonne = 'B';
+                for (int i = 1; i < 8; i++)
+                {
+                    statMoyennes.Range[colonne.ToString() + (ligneStatMoyennesEe + 2)].Formula =
+                        "=AVERAGE(" + colonne + ligneStatMoyennesEeDébut + ":" + colonne + ligneStatMoyennesEe + ")";
+                    colonne++;
+                }
+                statMoyennes.Range["J" + (ligneStatMoyennesEe + 2)].Formula =
+                    "=AVERAGE(J" + ligneStatMoyennesEeDébut + ":J" + ligneStatMoyennesEe + ")";
+            }
 
             #endregion Dnb1MoyennesEpreuves
 
@@ -616,8 +687,13 @@ namespace Brevet_blanc
             {
                 var fichierDnbXlsx = Path.GetFileName(file);
 
-                if (fichierDnbXlsx.Contains("DNB1") && fichierDnbXlsx.Contains("xlsx"))
+                if (fichierDnbXlsx.Contains(NumDnb()) && fichierDnbXlsx.Contains("xlsx"))
                 {
+                    if ((ligneStatMoyennesCc == 3) || (ligneStatMoyennesCc == 15))
+                    {
+                        statMoyennesControle.Range["B" + (ligneStatMoyennesCc + 1) + ":G" + (ligneStatMoyennesCc + 10)].Value = 0;
+                        ligneStatMoyennesCcDébut = ligneStatMoyennesCc;
+                    }
                     ligneStatMoyennesCc++;
                     var colonne1 = 'C';
                     var fichierDnb = lblDestination.Text + @"DNB\Notes\" + fichierDnbXlsx;
@@ -648,19 +724,40 @@ namespace Brevet_blanc
                 }
             }
 
-            var range5 = statMoyennesControle.Range["A" + (ligneStatMoyennesCc + 1), "J13"];
-            range5.Value = "";
-
-            statMoyennesControle.Range["A1"].Value = "Année scolaire 2018-2019";
-            statMoyennesControle.Range["A" + (ligneStatMoyennesCc + 2)].Value = "Niveau";
-
-            colonne = 'B';
-            for (int i = 1; i < 9; i++)
+            var range5 = statMoyennesControle.Range["A1:A1"];
+            if (ligneStatMoyennesCc < 15)
             {
-                statMoyennesControle.Range[colonne.ToString() + (ligneStatMoyennesCc + 2)].Formula = "=AVERAGE(" + colonne + "4:" + colonne + ligneStatMoyennesCc + ")";
-                colonne++;
+                range5 = statMoyennesControle.Range["A" + (ligneStatMoyennesCc + 1),
+                     "J13"];
             }
-            statMoyennesControle.Range["J" + (ligneStatMoyennesCc + 2)].Formula = "=AVERAGE(J4:J" + ligneStatMoyennesCc + ")";
+            if (ligneStatMoyennesCc > 15)
+            {
+                range5 = statMoyennesControle.Range["A" + (ligneStatMoyennesCc + 1),
+                     "J25"];
+            }
+
+            if ((ligneStatMoyennesCc == 3) || (ligneStatMoyennesCc == 15))
+            {
+                statMoyennesControle.Range["A" + (ligneStatMoyennesCc + 1), "J" + (ligneStatMoyennesCc + 10)].Value = "";
+            }
+            
+            else range5.Value = "";
+
+            if (nombreClasses > 0)
+            {
+                statMoyennesControle.Range["A1"].Value = "Année scolaire 2018-2019";
+                statMoyennesControle.Range["A" + (ligneStatMoyennesCc + 2)].Value = "Niveau";
+
+                colonne = 'B';
+                for (int i = 1; i < 9; i++)
+                {
+                    statMoyennesControle.Range[colonne.ToString() + (ligneStatMoyennesCc + 2)].Formula =
+                        "=AVERAGE(" + colonne + ligneStatMoyennesCcDébut + ":" + colonne + ligneStatMoyennesCc + ")";
+                    colonne++;
+                }
+                statMoyennesControle.Range["J" + (ligneStatMoyennesCc + 2)].Formula =
+                    "=AVERAGE(J" + ligneStatMoyennesCcDébut + ":J" + ligneStatMoyennesCc + ")";
+            }
 
             #endregion Dnb1MoyennesControleContinu
 
