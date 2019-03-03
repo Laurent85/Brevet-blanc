@@ -633,6 +633,7 @@ namespace Brevet_blanc
 
                     if (fichierDnbXlsx.Contains(dnb.Text) && fichierDnbXlsx.Contains("xlsx"))
                     {
+                        #region Initialisation des variables
                         if ((ligneStatMoyennesEe == 3) || (ligneStatMoyennesEe == 15))
                         {
                             statMoyennes.Range["B" + (ligneStatMoyennesEe + 1) + ":G" + (ligneStatMoyennesEe + 10)].Value = 0;
@@ -645,6 +646,7 @@ namespace Brevet_blanc
                         statMoyennes.Range["A" + ligneStatMoyennesEe].Value = ((Worksheet)dnbXlsx.Sheets.Item[1]).Range["B2"].Value.ToString(); //classe
                         statMoyennes.Range["I" + ligneStatMoyennesEe].Value = ""; //oral
                         int effectif = int.Parse(statSynthèse.Range["B" + ligneStatMoyennesEe.ToString()].Value.ToString()); //effectif
+                        #endregion
                         #region Calcul des moyennes par épreuve
                         var colonne = 'B';
                         for (int i = 1; i < 8; i++)
@@ -689,8 +691,8 @@ namespace Brevet_blanc
                 if (nombreClasses > 0)
                 {
                     statMoyennes.Range["A1"].Value = "Année scolaire 2018-2019";
-                    statMoyennes.Range["A" + (ligneStatMoyennesEe + 2)].Value = "Niveau";
                     #region Calcul de la moyenne générale par épreuve pour le niveau
+                    statMoyennes.Range["A" + (ligneStatMoyennesEe + 2)].Value = "Niveau";                    
                     var colonne = 'B';
                     for (int i = 1; i < 8; i++)
                     {
@@ -715,20 +717,23 @@ namespace Brevet_blanc
 
                     if (fichierDnbXlsx.Contains(dnb.Text) && fichierDnbXlsx.Contains("xlsx"))
                     {
+                        #region Initialisation des variables
                         if ((ligneStatMoyennesCc == 3) || (ligneStatMoyennesCc == 15))
                         {
                             statMoyennesControle.Range["B" + (ligneStatMoyennesCc + 1) + ":G" + (ligneStatMoyennesCc + 10)].Value = 0;
                             ligneStatMoyennesCcDébut = ligneStatMoyennesCc;
                         }
-                        ligneStatMoyennesCc++;
-                        var colonne1 = 'C';
+                        ligneStatMoyennesCc++;                        
                         var fichierDnb = lblDestination.Text + @"DNB\Notes\" + fichierDnbXlsx;
                         var dnbXlsx = excelApplication.Workbooks.Open(fichierDnb);
                         var dnbRécapitulatif = (Worksheet)dnbXlsx.Sheets.Item[1];
                         statMoyennesControle.Range["A" + ligneStatMoyennesCc].Value = ((Worksheet)dnbXlsx.Sheets.Item[1]).Range["B2"].Value.ToString();
                         statMoyennesControle.Range["I" + ligneStatMoyennesCc].Value = "";
                         int effectif = int.Parse(statSynthèse.Range["B" + ligneStatMoyennesCc.ToString()].Value.ToString());
+                        #endregion
+                        #region Calcul des moyennes par domaine
                         var colonne = 'B';
+                        var colonne1 = 'C';
                         for (int i = 1; i < 9; i++)
                         {
                             float somme = 0;
@@ -743,12 +748,14 @@ namespace Brevet_blanc
                             colonne++;
                             colonne1++;
                         }
-
+                        #endregion
+                        #region Calcul de la moyenne générale des domaines
                         statMoyennesControle.Range["J" + ligneStatMoyennesCc].Formula = "=AVERAGE(B" + ligneStatMoyennesCc + ":I" + ligneStatMoyennesCc;
                         dnbXlsx.Close();
+                        #endregion
                     }
                 }
-
+                #region Effacement des cellules inutiles
                 var range5 = statMoyennesControle.Range["A1:A1"];
                 if (ligneStatMoyennesCc < 15)
                 {
@@ -766,10 +773,11 @@ namespace Brevet_blanc
                     statMoyennesControle.Range["A" + (ligneStatMoyennesCc + 1), "J" + (ligneStatMoyennesCc + 10)].Value = "";
                 }
                 else range5.Value = "";
-
+                #endregion
                 if (nombreClasses > 0)
                 {
                     statMoyennesControle.Range["A1"].Value = "Année scolaire 2018-2019";
+                    #region Calcul de la moyenne générale par épreuve pour le niveau
                     statMoyennesControle.Range["A" + (ligneStatMoyennesCc + 2)].Value = "Niveau";
 
                     var colonne = 'B';
@@ -779,8 +787,11 @@ namespace Brevet_blanc
                             "=AVERAGE(" + colonne + ligneStatMoyennesCcDébut + ":" + colonne + ligneStatMoyennesCc + ")";
                         colonne++;
                     }
+                    #endregion
+                    #region Calcul de la moyenne générale pour le niveau
                     statMoyennesControle.Range["J" + (ligneStatMoyennesCc + 2)].Formula =
                         "=AVERAGE(J" + ligneStatMoyennesCcDébut + ":J" + ligneStatMoyennesCc + ")";
+                    #endregion
                 }
             }
 
