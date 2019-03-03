@@ -383,7 +383,7 @@ namespace Brevet_blanc
             var statMoyennesControle = (Worksheet)statXlsx.Sheets.Item[3];
             var statListing = (Worksheet)statXlsx.Sheets.Item[4];
             var statDelta = (Worksheet)statXlsx.Sheets.Item[5];
-            #endregion
+            #endregion Initialisation des classeurs Excel
 
             foreach (RadioButton dnb in panel1.Controls) //DNB1 et DNB2
             {
@@ -416,7 +416,7 @@ namespace Brevet_blanc
                     statListing = (Worksheet)statXlsx.Sheets.Item[6];
                     statDelta = (Worksheet)statXlsx.Sheets.Item[7];
                 }
-                #endregion
+                #endregion Initialisation des variables (lignes)
 
                 #region Dnb1SynthèseEtListing
 
@@ -428,7 +428,7 @@ namespace Brevet_blanc
                     statListing.Range["A" + i].Value = "";
                     statListing.Range["E" + i].Value = "";
                 }
-                #endregion
+                #endregion Effacement Listing et Delta
 
                 foreach (var file in fichiersDnbXlsx)
                 {
@@ -448,10 +448,9 @@ namespace Brevet_blanc
                         var épreuvesEcrites = (Worksheet)dnbXlsx.Sheets.Item[2];
 
                         var range = dnbRécapitulatif.Range["AG2:AG50"];
-                        
 
                         statSynthèse.Range["A" + ligneStatSynthèse].Value = dnbRécapitulatif.Range["B2"].Value.ToString();
-                        #endregion
+                        #endregion initialisation des variables
 
                         foreach (Range element in range.Cells)
                         {
@@ -562,9 +561,8 @@ namespace Brevet_blanc
                             if (ligneEleve == 50) ligneEleve = 2;
                             else
                                 ligneEleve++;
-                            #endregion
+                            #endregion Dnb1SynthèseEtListing
                         }
-                        
 
                         #region Calcul colonne J - Moyennes générales
                         float total = 0;
@@ -581,10 +579,9 @@ namespace Brevet_blanc
                         statSynthèse.Range["J" + ligneStatSynthèse].Value = total / compteur;
                         dnbXlsx.Close();
                         nombreClasses++;
-                        #endregion
+                        #endregion Calcul colonne J - Moyennes générales
                     }
                 }
-
 
                 #region Nettoyage des cellules
                 var range1 = statSynthèse.Range["A1:A1"];
@@ -603,7 +600,7 @@ namespace Brevet_blanc
                     statSynthèse.Range["A" + (ligneStatSynthèse + 1), "J" + (ligneStatSynthèse + 10)].Value = "";
                 }
                 else range1.Value = "";
-                #endregion
+                #endregion Nettoyage des cellules
 
                 #region Calcul ligne "Niveau"
                 if (nombreClasses > 0)
@@ -619,12 +616,12 @@ namespace Brevet_blanc
                         colonne++;
                     }
 
-                    // Pourcentage et moyenne pour la ligne "niveau" 
+                    // Pourcentage et moyenne pour la ligne "niveau"
                     statSynthèse.Range["I" + (ligneStatSynthèse + 2)].Formula =
                         "=H" + (ligneStatSynthèse + 2) + "/B" + (ligneStatSynthèse + 2);
                     statSynthèse.Range["J" + (ligneStatSynthèse + 2)].Formula = "=AVERAGE(J" + ligneStatSynthèseDébut + ":J" + ligneStatSynthèse;
                 }
-                #endregion
+                #endregion Calcul ligne "Niveau"
 
                 #endregion Dnb1SynthèseEtListing
 
@@ -665,7 +662,7 @@ namespace Brevet_blanc
                         #region Calcul de la moyenne générale des épreuves
                         dnbEpreuvesEcrites.Range["J" + (effectif + 3)].Formula = "=AVERAGE(B" + (effectif + 3) + ":H" + (effectif + 3) + ")";
                         statMoyennes.Range["J" + ligneStatMoyennesEe].Value = Math.Round(float.Parse(dnbEpreuvesEcrites.Range["J" + (effectif + 3)].Value.ToString()), 2);
-                        #endregion 
+                        #endregion
                         object misValue = Missing.Value;
                         dnbXlsx.Close(false, misValue, misValue);
                     }
