@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Principal));
             this.BtnGénérerDiplomes = new System.Windows.Forms.Button();
             this.BtnGénérerStats = new System.Windows.Forms.Button();
             this.chkLb_Notes = new System.Windows.Forms.CheckedListBox();
@@ -368,6 +369,7 @@
             this.Controls.Add(this.BtnGénérerDiplomes);
             this.Controls.Add(this.panel1);
             this.DoubleBuffered = true;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Principal";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Brevet blanc";
