@@ -22,12 +22,13 @@ namespace Brevet_blanc
         public System.Data.DataTable TableComposantes = new System.Data.DataTable();
         public int RowCount;
         public string Classe;
+        public string Progression;
 
         private void Principal_Load(object sender, EventArgs e)
         {
             TuerProcessus("Excel");
-            //lblSource.Text = @"X:\Logiciels\";
-            //lblDestination.Text = @"C:\Users\User\Desktop\";
+            lblSource.Text = @"X:\Logiciels\";
+            lblDestination.Text = @"C:\Users\User\Desktop\";
             rdbSansOral.Checked = true;
             rdbDnb1.Checked = true;
             RemplirDatatable(TableNotes, lblSource.Text, "*.xls*", "Recapitulatif", "Notes", "AliasFichierNotes");
@@ -136,7 +137,7 @@ namespace Brevet_blanc
 
                 RowCount = range.Cells.Count;
                 k = 0;
-
+                Progression = "Traduction couleurs composantes en points...";
                 foreach (Range element in range.Cells) //Transformation des couleurs en points
                 {
                     if (element.Font.ColorIndex == -5) //Rouge
@@ -162,13 +163,21 @@ namespace Brevet_blanc
                 var excelDocument2 = appExcel2.Workbooks.Open(lblDestination.Text + @"DNB\DNB-" + Classe);
                 Worksheet worksheet2 = excelDocument2.ActiveSheet;
 
+                RowCount = effectif;
+                k = 0;
+                Progression = "Copie du nom des élèves et de la classe...";
                 for (int i = 2; i <= effectif + 1; i++) //Copie du nom des élèves et de la classe
                 {
                     récapitulatif.Cells[i, 1].Value = worksheet.Cells[3, i].Value.ToString();
                     récapitulatif.Cells[i, 2].Value = Classe;
                     épreuvesEcrites.Cells[i, 1].Value = worksheet.Cells[3, i].Value.ToString();
+                    k++;
+                    ThreadDiplomes.ReportProgress(k);
                 }
 
+                RowCount = effectif;
+                k = 0;
+                Progression = "Copie des points des composantes...";
                 for (int i = 2; i <= effectif + 1; i++) //Copie des points des composantes
                 {
                     for (int j = 3; j <= 10; j++)
@@ -176,6 +185,8 @@ namespace Brevet_blanc
                         if (worksheet2.Cells[j + 1, i].Value != null)
                             récapitulatif.Cells[i, j].Value = worksheet2.Cells[j + 1, i].Value.ToString();
                     }
+                    k++;
+                    ThreadDiplomes.ReportProgress(k);
                 }
 
                 var cells = récapitulatif.Range["A" + (effectif + 2) + ":A500"]; //Nettoyage bas tableau récapitulatif
@@ -203,8 +214,7 @@ namespace Brevet_blanc
             #region CopieNotes
 
             string nomduFichierNotes = "";
-            RowCount = chkLb_Notes.CheckedItems.Count;
-            k = 0;
+            
             foreach (var fichierNotes in chkLb_Notes.CheckedItems)
             {
                 foreach (DataRow ligne in TableNotes.Rows)
@@ -229,6 +239,9 @@ namespace Brevet_blanc
                 var récapitulatif = (Worksheet)excelDocument2.Sheets.Item[1];
                 var épreuvesEcrites2 = (Worksheet)excelDocument2.Sheets.Item[2];
 
+                RowCount = effectif;
+                k = 0;
+                Progression = "Copie des notes...";
                 for (int i = 2; i <= effectif + 1; i++) //Copie des notes
                 {
                     int m = 11;
@@ -252,6 +265,9 @@ namespace Brevet_blanc
                     }
                     récapitulatif.Range["AR" + i].Value = totalPoints + 400;
                     récapitulatif.Range["AT" + i].Value = totalPoints;
+
+                    k++;
+                    ThreadDiplomes.ReportProgress(k);
                 }
 
                 var cells = épreuvesEcrites2.Range["A" + (effectif + 2) + ":A500"]; //Nettoyage bas tableau récapitulatif
@@ -268,8 +284,7 @@ namespace Brevet_blanc
                 Marshal.ReleaseComObject(appExcel);
                 Marshal.ReleaseComObject(appExcel2);
 
-                k++;
-                ThreadDiplomes.ReportProgress(k);
+                
             }
 
             #endregion CopieNotes
@@ -281,6 +296,7 @@ namespace Brevet_blanc
             var fichiersDnb = Directory.GetFiles(lblDestination.Text + @"DNB\", "*.*");
             RowCount = 0;
             k = 0;
+            Progression = "Publipostage des diplômes...";
             foreach (var unused in chkLb_Notes.CheckedItems)
             {
                 RowCount++;
@@ -350,7 +366,7 @@ namespace Brevet_blanc
             // Change the value of the ProgressBar to the BackgroundWorker progress.
             progressBar1.Value = e.ProgressPercentage;
             // Set the text.
-            lblCompteur.Text = e.ProgressPercentage + @" / " + RowCount;
+            lblCompteur.Text = Progression + Environment.NewLine + Environment.NewLine + @"            " + e.ProgressPercentage +  @" / " + RowCount;
             lblClasse.Text = @"Traitement des " + Classe;
         }
 
@@ -363,9 +379,17 @@ namespace Brevet_blanc
 
         private void BtnGénérerStatistiques(object sender, EventArgs e)
         {
-            #region Initialisation des classeurs Excel
+            progressBar1.Visible = true;
+            lblCompteur.Visible = true;
+            ThreadStatistiques.RunWorkerAsync();
+        }
+
+        private void ThreadStatistiquesMéthode(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+  #region Initialisation des classeurs Excel
             var fichiersDnbXlsx = Directory.GetFiles(lblDestination.Text + @"DNB\Notes\");
             var fichierStat = lblDestination.Text + @"DNB\Statistiques.xlsx";
+            int k;
             if (!File.Exists(fichierStat))
             {
                 var assembly = Assembly.GetExecutingAssembly();
@@ -430,6 +454,9 @@ namespace Brevet_blanc
                 }
                 #endregion Effacement Listing et Delta
 
+                RowCount = fichiersDnbXlsx.Count();
+                k = 0;
+                Progression = "Synthèse...";
                 foreach (var file in fichiersDnbXlsx)
                 {
                     #region initialisation des variables
@@ -451,7 +478,7 @@ namespace Brevet_blanc
 
                         statSynthèse.Range["A" + ligneStatSynthèse].Value = dnbRécapitulatif.Range["B2"].Value.ToString();
                         #endregion initialisation des variables
-
+                        
                         foreach (Range element in range.Cells)
                         {
                             # region Gestion des mentions pour Synthèse, Listing et Delta
@@ -561,6 +588,7 @@ namespace Brevet_blanc
                             if (ligneEleve == 50) ligneEleve = 2;
                             else
                                 ligneEleve++;
+                            
                             #endregion Dnb1SynthèseEtListing
                         }
 
@@ -581,6 +609,8 @@ namespace Brevet_blanc
                         nombreClasses++;
                         #endregion Calcul colonne J - Moyennes générales
                     }
+                    k++;
+                    ThreadStatistiques.ReportProgress(k);
                 }
 
                 #region Nettoyage des cellules
@@ -627,6 +657,9 @@ namespace Brevet_blanc
 
                 #region Dnb1MoyennesEpreuves
 
+                RowCount = fichiersDnbXlsx.Count();
+                k = 0;
+                Progression = "Epreuves écrites...";
                 foreach (var file in fichiersDnbXlsx)
                 {
                     var fichierDnbXlsx = Path.GetFileName(file);
@@ -668,6 +701,8 @@ namespace Brevet_blanc
                         object misValue = Missing.Value;
                         dnbXlsx.Close(false, misValue, misValue);
                     }
+                    k++;
+                    ThreadStatistiques.ReportProgress(k);
                 }
                 #region Effacement des cellules inutiles
                 var range3 = statMoyennes.Range["A1:A1"];
@@ -711,6 +746,9 @@ namespace Brevet_blanc
 
                 #region Dnb1MoyennesControleContinu
 
+                RowCount = fichiersDnbXlsx.Count();
+                k = 0;
+                Progression = "Contrôle continu...";
                 foreach (var file in fichiersDnbXlsx)
                 {
                     var fichierDnbXlsx = Path.GetFileName(file);
@@ -754,6 +792,8 @@ namespace Brevet_blanc
                         dnbXlsx.Close();
                         #endregion
                     }
+                    k++;
+                    ThreadStatistiques.ReportProgress(k);
                 }
                 #region Effacement des cellules inutiles
                 var range5 = statMoyennesControle.Range["A1:A1"];
@@ -803,6 +843,23 @@ namespace Brevet_blanc
                             lblDestination.Text + @"DNB\Statistiques.pdf");
             statXlsx.Close();
             GC.Collect();
+        }
+
+        private void ThreadStatistiquesProgression(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+            progressBar1.Maximum = RowCount;
+            // Change the value of the ProgressBar to the BackgroundWorker progress.
+            progressBar1.Value = e.ProgressPercentage;
+            // Set the text.
+            lblCompteur.Text = Progression + Environment.NewLine + Environment.NewLine + @"            " + e.ProgressPercentage +  @" / " + RowCount;
+            lblClasse.Text = @"Traitement des statistiques";
+        }
+
+        private void ThreadStatistiquesTerminé(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            progressBar1.Value = 0;
+            lblCompteur.Text = "";
+            lblClasse.Text = @"Terminé !";
         }
 
         private void BtnSuppressionFichiers(object sender, EventArgs e)

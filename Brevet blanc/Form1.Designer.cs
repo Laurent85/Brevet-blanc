@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Principal));
             this.BtnGénérerDiplomes = new System.Windows.Forms.Button();
             this.BtnGénérerStats = new System.Windows.Forms.Button();
             this.chkLb_Notes = new System.Windows.Forms.CheckedListBox();
@@ -56,6 +55,7 @@
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.ThreadStatistiques = new System.ComponentModel.BackgroundWorker();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numDelta)).BeginInit();
@@ -67,9 +67,9 @@
             // BtnGénérerDiplomes
             // 
             this.BtnGénérerDiplomes.BackColor = System.Drawing.Color.Transparent;
-            this.BtnGénérerDiplomes.Location = new System.Drawing.Point(634, 274);
+            this.BtnGénérerDiplomes.Location = new System.Drawing.Point(632, 293);
             this.BtnGénérerDiplomes.Name = "BtnGénérerDiplomes";
-            this.BtnGénérerDiplomes.Size = new System.Drawing.Size(132, 23);
+            this.BtnGénérerDiplomes.Size = new System.Drawing.Size(199, 23);
             this.BtnGénérerDiplomes.TabIndex = 0;
             this.BtnGénérerDiplomes.Text = "Générer les diplômes";
             this.BtnGénérerDiplomes.UseVisualStyleBackColor = false;
@@ -77,9 +77,9 @@
             // 
             // BtnGénérerStats
             // 
-            this.BtnGénérerStats.Location = new System.Drawing.Point(634, 315);
+            this.BtnGénérerStats.Location = new System.Drawing.Point(632, 334);
             this.BtnGénérerStats.Name = "BtnGénérerStats";
-            this.BtnGénérerStats.Size = new System.Drawing.Size(132, 23);
+            this.BtnGénérerStats.Size = new System.Drawing.Size(199, 23);
             this.BtnGénérerStats.TabIndex = 1;
             this.BtnGénérerStats.Text = "Générer les statistiques";
             this.BtnGénérerStats.UseVisualStyleBackColor = true;
@@ -90,7 +90,7 @@
             this.chkLb_Notes.BackColor = System.Drawing.Color.Linen;
             this.chkLb_Notes.CheckOnClick = true;
             this.chkLb_Notes.FormattingEnabled = true;
-            this.chkLb_Notes.Location = new System.Drawing.Point(45, 208);
+            this.chkLb_Notes.Location = new System.Drawing.Point(76, 209);
             this.chkLb_Notes.Name = "chkLb_Notes";
             this.chkLb_Notes.Size = new System.Drawing.Size(247, 244);
             this.chkLb_Notes.TabIndex = 2;
@@ -100,14 +100,14 @@
             this.chkLb_Composantes.BackColor = System.Drawing.Color.Linen;
             this.chkLb_Composantes.CheckOnClick = true;
             this.chkLb_Composantes.FormattingEnabled = true;
-            this.chkLb_Composantes.Location = new System.Drawing.Point(319, 208);
+            this.chkLb_Composantes.Location = new System.Drawing.Point(350, 209);
             this.chkLb_Composantes.Name = "chkLb_Composantes";
             this.chkLb_Composantes.Size = new System.Drawing.Size(247, 244);
             this.chkLb_Composantes.TabIndex = 3;
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(215, 475);
+            this.button3.Location = new System.Drawing.Point(246, 476);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(186, 23);
             this.button3.TabIndex = 4;
@@ -121,7 +121,7 @@
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.Blue;
-            this.label1.Location = new System.Drawing.Point(82, 167);
+            this.label1.Location = new System.Drawing.Point(113, 168);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(167, 24);
             this.label1.TabIndex = 5;
@@ -133,7 +133,7 @@
             this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.Blue;
-            this.label2.Location = new System.Drawing.Point(359, 167);
+            this.label2.Location = new System.Drawing.Point(390, 168);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(164, 24);
             this.label2.TabIndex = 6;
@@ -145,7 +145,7 @@
             this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.Font = new System.Drawing.Font("Brush Script MT", 48F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.OliveDrab;
-            this.label3.Location = new System.Drawing.Point(251, 1);
+            this.label3.Location = new System.Drawing.Point(336, 9);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(285, 79);
             this.label3.TabIndex = 7;
@@ -160,15 +160,18 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(634, 405);
+            this.progressBar1.Location = new System.Drawing.Point(632, 414);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(132, 23);
+            this.progressBar1.Size = new System.Drawing.Size(199, 23);
             this.progressBar1.TabIndex = 8;
             // 
             // lblCompteur
             // 
             this.lblCompteur.AutoSize = true;
-            this.lblCompteur.Location = new System.Drawing.Point(634, 443);
+            this.lblCompteur.BackColor = System.Drawing.Color.Transparent;
+            this.lblCompteur.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCompteur.ForeColor = System.Drawing.Color.Red;
+            this.lblCompteur.Location = new System.Drawing.Point(629, 458);
             this.lblCompteur.Name = "lblCompteur";
             this.lblCompteur.Size = new System.Drawing.Size(0, 13);
             this.lblCompteur.TabIndex = 9;
@@ -176,9 +179,12 @@
             // lblClasse
             // 
             this.lblClasse.AutoSize = true;
-            this.lblClasse.Location = new System.Drawing.Point(634, 370);
+            this.lblClasse.BackColor = System.Drawing.Color.Transparent;
+            this.lblClasse.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblClasse.ForeColor = System.Drawing.Color.Red;
+            this.lblClasse.Location = new System.Drawing.Point(629, 389);
             this.lblClasse.Name = "lblClasse";
-            this.lblClasse.Size = new System.Drawing.Size(0, 13);
+            this.lblClasse.Size = new System.Drawing.Size(0, 16);
             this.lblClasse.TabIndex = 10;
             // 
             // btnSource
@@ -248,7 +254,7 @@
             this.panel1.BackColor = System.Drawing.Color.Transparent;
             this.panel1.Controls.Add(this.rdbDnb1);
             this.panel1.Controls.Add(this.rdbDnb2);
-            this.panel1.Location = new System.Drawing.Point(592, 210);
+            this.panel1.Location = new System.Drawing.Point(632, 229);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(94, 47);
             this.panel1.TabIndex = 19;
@@ -258,7 +264,7 @@
             this.panel2.BackColor = System.Drawing.Color.Transparent;
             this.panel2.Controls.Add(this.rdbSansOral);
             this.panel2.Controls.Add(this.rdbAvecOral);
-            this.panel2.Location = new System.Drawing.Point(694, 210);
+            this.panel2.Location = new System.Drawing.Point(734, 229);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(97, 47);
             this.panel2.TabIndex = 20;
@@ -289,7 +295,7 @@
             // numDelta
             // 
             this.numDelta.BackColor = System.Drawing.Color.Linen;
-            this.numDelta.Location = new System.Drawing.Point(694, 173);
+            this.numDelta.Location = new System.Drawing.Point(734, 192);
             this.numDelta.Name = "numDelta";
             this.numDelta.Size = new System.Drawing.Size(47, 20);
             this.numDelta.TabIndex = 21;
@@ -299,7 +305,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.BackColor = System.Drawing.Color.Transparent;
-            this.label4.Location = new System.Drawing.Point(637, 175);
+            this.label4.Location = new System.Drawing.Point(677, 194);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(32, 13);
             this.label4.TabIndex = 23;
@@ -309,7 +315,7 @@
             // 
             this.pictureBox3.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox3.Image = global::Brevet_blanc.Properties.Resources.Sigle1;
-            this.pictureBox3.Location = new System.Drawing.Point(669, 175);
+            this.pictureBox3.Location = new System.Drawing.Point(709, 194);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(20, 13);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -320,7 +326,7 @@
             // 
             this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox2.Image = global::Brevet_blanc.Properties.Resources.ED1;
-            this.pictureBox2.Location = new System.Drawing.Point(697, 32);
+            this.pictureBox2.Location = new System.Drawing.Point(800, 31);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(69, 57);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -338,6 +344,13 @@
             this.pictureBox1.TabIndex = 15;
             this.pictureBox1.TabStop = false;
             // 
+            // ThreadStatistiques
+            // 
+            this.ThreadStatistiques.WorkerReportsProgress = true;
+            this.ThreadStatistiques.DoWork += new System.ComponentModel.DoWorkEventHandler(this.ThreadStatistiquesMéthode);
+            this.ThreadStatistiques.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.ThreadStatistiquesProgression);
+            this.ThreadStatistiques.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.ThreadStatistiquesTerminé);
+            // 
             // Principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -345,7 +358,7 @@
             this.BackColor = System.Drawing.Color.White;
             this.BackgroundImage = global::Brevet_blanc.Properties.Resources.Fond;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(800, 519);
+            this.ClientSize = new System.Drawing.Size(915, 557);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.numDelta);
@@ -369,7 +382,6 @@
             this.Controls.Add(this.BtnGénérerDiplomes);
             this.Controls.Add(this.panel1);
             this.DoubleBuffered = true;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Principal";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Brevet blanc";
@@ -416,6 +428,7 @@
         private System.Windows.Forms.NumericUpDown numDelta;
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.Label label4;
+        private System.ComponentModel.BackgroundWorker ThreadStatistiques;
     }
 }
 
