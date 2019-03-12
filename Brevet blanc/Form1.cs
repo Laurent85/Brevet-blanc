@@ -374,7 +374,9 @@ namespace Brevet_blanc
         {
             progressBar1.Value = 0;
             lblCompteur.Text = "";
+            lblClasse.ForeColor = System.Drawing.Color.ForestGreen;
             lblClasse.Text = @"Terminé !";
+            lblClasses.ForeColor = System.Drawing.Color.ForestGreen;
         }
 
         private void BtnGénérerStatistiques(object sender, EventArgs e)
@@ -979,7 +981,6 @@ namespace Brevet_blanc
             tableNotes.Columns.Add("notes", typeof(string));
             tableComposantes.Columns.Add("composantes", typeof(string));
             int i = 0;
-            int j = 0;
 
             foreach (var item1 in chkLb_Notes.CheckedItems)
             {
