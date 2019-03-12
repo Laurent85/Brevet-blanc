@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using DataTable = System.Data.DataTable;
 using Range = Microsoft.Office.Interop.Excel.Range;
 
 namespace Brevet_blanc
@@ -39,6 +40,7 @@ namespace Brevet_blanc
             RemplirListeBox(chkLb_Composantes, TableComposantes);
             for (int i = 0; i < 5; i++)
                 chkLb_Composantes.SetItemChecked(i, true);
+            chkLb_Notes_SelectedIndexChanged(sender, e);
         }
 
         private void BtnChoisirSource(object sender, EventArgs e)
@@ -214,7 +216,7 @@ namespace Brevet_blanc
             #region CopieNotes
 
             string nomduFichierNotes = "";
-            
+
             foreach (var fichierNotes in chkLb_Notes.CheckedItems)
             {
                 foreach (DataRow ligne in TableNotes.Rows)
@@ -283,8 +285,6 @@ namespace Brevet_blanc
 
                 Marshal.ReleaseComObject(appExcel);
                 Marshal.ReleaseComObject(appExcel2);
-
-                
             }
 
             #endregion CopieNotes
@@ -366,7 +366,7 @@ namespace Brevet_blanc
             // Change the value of the ProgressBar to the BackgroundWorker progress.
             progressBar1.Value = e.ProgressPercentage;
             // Set the text.
-            lblCompteur.Text = Progression + Environment.NewLine + Environment.NewLine + @"            " + e.ProgressPercentage +  @" / " + RowCount;
+            lblCompteur.Text = Progression + Environment.NewLine + Environment.NewLine + @"            " + e.ProgressPercentage + @" / " + RowCount;
             lblClasse.Text = @"Traitement des " + Classe;
         }
 
@@ -386,7 +386,7 @@ namespace Brevet_blanc
 
         private void ThreadStatistiquesMéthode(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-  #region Initialisation des classeurs Excel
+            #region Initialisation des classeurs Excel
             var fichiersDnbXlsx = Directory.GetFiles(lblDestination.Text + @"DNB\Notes\");
             var fichierStat = lblDestination.Text + @"DNB\Statistiques.xlsx";
             int k;
@@ -478,7 +478,7 @@ namespace Brevet_blanc
 
                         statSynthèse.Range["A" + ligneStatSynthèse].Value = dnbRécapitulatif.Range["B2"].Value.ToString();
                         #endregion initialisation des variables
-                        
+
                         foreach (Range element in range.Cells)
                         {
                             # region Gestion des mentions pour Synthèse, Listing et Delta
@@ -588,7 +588,7 @@ namespace Brevet_blanc
                             if (ligneEleve == 50) ligneEleve = 2;
                             else
                                 ligneEleve++;
-                            
+
                             #endregion Dnb1SynthèseEtListing
                         }
 
@@ -636,7 +636,7 @@ namespace Brevet_blanc
                 if (nombreClasses > 0)
                 {
                     statSynthèse.Range["A" + (ligneStatSynthèse + 2)].Value = "Niveau";
-                    statDelta.Range["A2"].Value = ligneStatDelta - 3 + " élèves nécessitant discussion";
+                    statDelta.Range["A2"].Value = ligneStatDelta - 3 + " élèves à " + numDelta.Value + " points ou moins pour atteindre un palier";
 
                     var colonne = 'B';
                     for (int i = 1; i < 8; i++) // Somme des candidats de la ligne "niveau"
@@ -727,7 +727,7 @@ namespace Brevet_blanc
                 {
                     statMoyennes.Range["A1"].Value = "Année scolaire 2018-2019";
                     #region Calcul de la moyenne générale par épreuve pour le niveau
-                    statMoyennes.Range["A" + (ligneStatMoyennesEe + 2)].Value = "Niveau";                    
+                    statMoyennes.Range["A" + (ligneStatMoyennesEe + 2)].Value = "Niveau";
                     var colonne = 'B';
                     for (int i = 1; i < 8; i++)
                     {
@@ -761,7 +761,7 @@ namespace Brevet_blanc
                             statMoyennesControle.Range["B" + (ligneStatMoyennesCc + 1) + ":G" + (ligneStatMoyennesCc + 10)].Value = 0;
                             ligneStatMoyennesCcDébut = ligneStatMoyennesCc;
                         }
-                        ligneStatMoyennesCc++;                        
+                        ligneStatMoyennesCc++;
                         var fichierDnb = lblDestination.Text + @"DNB\Notes\" + fichierDnbXlsx;
                         var dnbXlsx = excelApplication.Workbooks.Open(fichierDnb);
                         var dnbRécapitulatif = (Worksheet)dnbXlsx.Sheets.Item[1];
@@ -851,7 +851,7 @@ namespace Brevet_blanc
             // Change the value of the ProgressBar to the BackgroundWorker progress.
             progressBar1.Value = e.ProgressPercentage;
             // Set the text.
-            lblCompteur.Text = Progression + Environment.NewLine + Environment.NewLine + @"            " + e.ProgressPercentage +  @" / " + RowCount;
+            lblCompteur.Text = Progression + Environment.NewLine + Environment.NewLine + @"            " + e.ProgressPercentage + @" / " + RowCount;
             lblClasse.Text = @"Traitement des statistiques";
         }
 
@@ -971,5 +971,131 @@ namespace Brevet_blanc
             if (rdbDnb2.Checked == true) numDnb = "DNB2";
             return numDnb;
         }
+
+        private void chkLb_Notes_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            System.Data.DataTable tableNotes = new System.Data.DataTable();
+            System.Data.DataTable tableComposantes = new System.Data.DataTable();
+            tableNotes.Columns.Add("notes", typeof(string));
+            tableComposantes.Columns.Add("composantes", typeof(string));
+            int i = 0;
+            int j = 0;
+
+            foreach (var item1 in chkLb_Notes.CheckedItems)
+            {
+                string classe1 = item1.ToString().Substring(0, 2);
+
+                foreach (DataRow classe in tableNotes.Rows)
+                {
+                    foreach (var item in classe.ItemArray)
+                    {
+                        if (classe1 == item.ToString())
+                            i = 1;
+                    }
+                }
+                tableNotes.Rows.Add(classe1);
+            }
+
+            foreach (var item1 in chkLb_Composantes.CheckedItems)
+            {
+                string classe1 = item1.ToString().Substring(0, 2);
+
+                foreach (DataRow classe in tableComposantes.Rows)
+                {
+                    foreach (var item in classe.ItemArray)
+                    {
+                        if (classe1 == item.ToString())
+                            i = 1;
+                    }
+                }
+                tableComposantes.Rows.Add(classe1);
+            }
+
+            DataTable dt;
+            dt = GetDifferentRecords(tableNotes, tableComposantes);
+
+            if ((dt.Rows.Count == 0) && (i == 0))
+            {
+                BtnGénérerDiplomes.Enabled = true;
+                DataView dv = tableNotes.DefaultView;
+                dv.Sort = "notes asc";
+                DataTable tableNotes1 = dv.ToTable();
+                foreach (DataRow classe in tableNotes1.Rows)
+                {
+                    foreach (var item in classe.ItemArray)
+                    {
+                        lblClasses.Text = lblClasses.Text + item + @"   ";
+                    }
+                }
+            }
+            else
+            {
+                BtnGénérerDiplomes.Enabled = false;
+                lblClasses.Text = "";
+            }
+        }
+
+        #region Compare two DataTables and return a DataTable with DifferentRecords
+
+        public DataTable GetDifferentRecords(DataTable firstDataTable, DataTable secondDataTable)
+        {
+            //Create Empty Table
+            DataTable resultDataTable = new DataTable("ResultDataTable");
+
+            //use a Dataset to make use of a DataRelation object
+            using (DataSet ds = new DataSet())
+            {
+                //Add tables
+                ds.Tables.AddRange(new DataTable[] { firstDataTable.Copy(), secondDataTable.Copy() });
+
+                //Get Columns for DataRelation
+                DataColumn[] firstColumns = new DataColumn[ds.Tables[0].Columns.Count];
+                for (int i = 0; i < firstColumns.Length; i++)
+                {
+                    firstColumns[i] = ds.Tables[0].Columns[i];
+                }
+
+                DataColumn[] secondColumns = new DataColumn[ds.Tables[1].Columns.Count];
+                for (int i = 0; i < secondColumns.Length; i++)
+                {
+                    secondColumns[i] = ds.Tables[1].Columns[i];
+                }
+
+                //Create DataRelation
+                DataRelation r1 = new DataRelation(string.Empty, firstColumns, secondColumns, false);
+                ds.Relations.Add(r1);
+
+                DataRelation r2 = new DataRelation(string.Empty, secondColumns, firstColumns, false);
+                ds.Relations.Add(r2);
+
+                //Create columns for return table
+                for (int i = 0; i < firstDataTable.Columns.Count; i++)
+                {
+                    resultDataTable.Columns.Add(firstDataTable.Columns[i].ColumnName, firstDataTable.Columns[i].DataType);
+                }
+
+                //If FirstDataTable Row not in SecondDataTable, Add to ResultDataTable.
+                resultDataTable.BeginLoadData();
+                foreach (DataRow parentrow in ds.Tables[0].Rows)
+                {
+                    DataRow[] childrows = parentrow.GetChildRows(r1);
+                    if (childrows == null || childrows.Length == 0)
+                        resultDataTable.LoadDataRow(parentrow.ItemArray, true);
+                }
+
+                //If SecondDataTable Row not in FirstDataTable, Add to ResultDataTable.
+                foreach (DataRow parentrow in ds.Tables[1].Rows)
+                {
+                    DataRow[] childrows = parentrow.GetChildRows(r2);
+                    if (childrows == null || childrows.Length == 0)
+                        resultDataTable.LoadDataRow(parentrow.ItemArray, true);
+                }
+                resultDataTable.EndLoadData();
+            }
+
+            return resultDataTable;
+        }
+
+        #endregion
     }
 }

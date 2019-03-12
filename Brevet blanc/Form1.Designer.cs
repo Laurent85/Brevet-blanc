@@ -56,6 +56,7 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.ThreadStatistiques = new System.ComponentModel.BackgroundWorker();
+            this.lblClasses = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numDelta)).BeginInit();
@@ -67,7 +68,7 @@
             // BtnGénérerDiplomes
             // 
             this.BtnGénérerDiplomes.BackColor = System.Drawing.Color.Transparent;
-            this.BtnGénérerDiplomes.Location = new System.Drawing.Point(632, 293);
+            this.BtnGénérerDiplomes.Location = new System.Drawing.Point(632, 305);
             this.BtnGénérerDiplomes.Name = "BtnGénérerDiplomes";
             this.BtnGénérerDiplomes.Size = new System.Drawing.Size(199, 23);
             this.BtnGénérerDiplomes.TabIndex = 0;
@@ -77,7 +78,7 @@
             // 
             // BtnGénérerStats
             // 
-            this.BtnGénérerStats.Location = new System.Drawing.Point(632, 334);
+            this.BtnGénérerStats.Location = new System.Drawing.Point(632, 346);
             this.BtnGénérerStats.Name = "BtnGénérerStats";
             this.BtnGénérerStats.Size = new System.Drawing.Size(199, 23);
             this.BtnGénérerStats.TabIndex = 1;
@@ -94,6 +95,7 @@
             this.chkLb_Notes.Name = "chkLb_Notes";
             this.chkLb_Notes.Size = new System.Drawing.Size(247, 244);
             this.chkLb_Notes.TabIndex = 2;
+            this.chkLb_Notes.SelectedIndexChanged += new System.EventHandler(this.chkLb_Notes_SelectedIndexChanged);
             // 
             // chkLb_Composantes
             // 
@@ -104,6 +106,7 @@
             this.chkLb_Composantes.Name = "chkLb_Composantes";
             this.chkLb_Composantes.Size = new System.Drawing.Size(247, 244);
             this.chkLb_Composantes.TabIndex = 3;
+            this.chkLb_Composantes.SelectedIndexChanged += new System.EventHandler(this.chkLb_Notes_SelectedIndexChanged);
             // 
             // button3
             // 
@@ -254,7 +257,7 @@
             this.panel1.BackColor = System.Drawing.Color.Transparent;
             this.panel1.Controls.Add(this.rdbDnb1);
             this.panel1.Controls.Add(this.rdbDnb2);
-            this.panel1.Location = new System.Drawing.Point(632, 229);
+            this.panel1.Location = new System.Drawing.Point(632, 209);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(94, 47);
             this.panel1.TabIndex = 19;
@@ -264,7 +267,7 @@
             this.panel2.BackColor = System.Drawing.Color.Transparent;
             this.panel2.Controls.Add(this.rdbSansOral);
             this.panel2.Controls.Add(this.rdbAvecOral);
-            this.panel2.Location = new System.Drawing.Point(734, 229);
+            this.panel2.Location = new System.Drawing.Point(734, 209);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(97, 47);
             this.panel2.TabIndex = 20;
@@ -295,7 +298,7 @@
             // numDelta
             // 
             this.numDelta.BackColor = System.Drawing.Color.Linen;
-            this.numDelta.Location = new System.Drawing.Point(734, 192);
+            this.numDelta.Location = new System.Drawing.Point(734, 172);
             this.numDelta.Name = "numDelta";
             this.numDelta.Size = new System.Drawing.Size(47, 20);
             this.numDelta.TabIndex = 21;
@@ -305,7 +308,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.BackColor = System.Drawing.Color.Transparent;
-            this.label4.Location = new System.Drawing.Point(677, 194);
+            this.label4.Location = new System.Drawing.Point(677, 174);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(32, 13);
             this.label4.TabIndex = 23;
@@ -315,7 +318,7 @@
             // 
             this.pictureBox3.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox3.Image = global::Brevet_blanc.Properties.Resources.Sigle1;
-            this.pictureBox3.Location = new System.Drawing.Point(709, 194);
+            this.pictureBox3.Location = new System.Drawing.Point(709, 174);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(20, 13);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -351,6 +354,17 @@
             this.ThreadStatistiques.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.ThreadStatistiquesProgression);
             this.ThreadStatistiques.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.ThreadStatistiquesTerminé);
             // 
+            // lblClasses
+            // 
+            this.lblClasses.AutoSize = true;
+            this.lblClasses.BackColor = System.Drawing.Color.Transparent;
+            this.lblClasses.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblClasses.ForeColor = System.Drawing.Color.Red;
+            this.lblClasses.Location = new System.Drawing.Point(644, 277);
+            this.lblClasses.Name = "lblClasses";
+            this.lblClasses.Size = new System.Drawing.Size(0, 16);
+            this.lblClasses.TabIndex = 24;
+            // 
             // Principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -359,6 +373,7 @@
             this.BackgroundImage = global::Brevet_blanc.Properties.Resources.Fond;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(915, 557);
+            this.Controls.Add(this.lblClasses);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.numDelta);
@@ -429,6 +444,7 @@
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.Label label4;
         private System.ComponentModel.BackgroundWorker ThreadStatistiques;
+        private System.Windows.Forms.Label lblClasses;
     }
 }
 
