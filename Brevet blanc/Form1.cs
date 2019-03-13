@@ -19,8 +19,8 @@ namespace Brevet_blanc
             InitializeComponent();
         }
 
-        public System.Data.DataTable TableNotes = new System.Data.DataTable();
-        public System.Data.DataTable TableComposantes = new System.Data.DataTable();
+        public DataTable TableNotes = new DataTable();
+        public DataTable TableComposantes = new DataTable();
         public int RowCount;
         public string Classe;
         public string Progression;
@@ -32,9 +32,18 @@ namespace Brevet_blanc
             lblDestination.Text = @"C:\Users\User\Desktop\";
             rdbSansOral.Checked = true;
             rdbDnb1.Checked = true;
-            RemplirDatatable(TableNotes, lblSource.Text, "*.xls*", "Recapitulatif", "Notes", "AliasFichierNotes");
-            RemplirDatatable(TableComposantes, lblSource.Text, "*.xls*", "Composantes", "Composantes", "AliasFichierComposantes");
-            RemplirListeBox(chkLb_Notes, TableNotes);
+            try
+            {
+                RemplirDatatable(TableNotes, lblSource.Text, "*.xls*", "Recapitulatif", "Notes", "AliasFichierNotes");
+                RemplirDatatable(TableComposantes, lblSource.Text, "*.xls*", "Composantes", "Composantes",
+                    "AliasFichierComposantes");
+                RemplirListeBox(chkLb_Notes, TableNotes);
+            }
+            catch
+            {
+                // ignored
+            }
+
             for (int i = 0; i < 5; i++)
                 chkLb_Notes.SetItemChecked(i, true);
             RemplirListeBox(chkLb_Composantes, TableComposantes);
@@ -426,7 +435,7 @@ namespace Brevet_blanc
                 int ligneStatDelta = 3;
                 int ligneEleve = 2;
 
-                if (dnb.Text == "DNB1")
+                if (dnb.Text == @"DNB1")
                 {
                     ligneStatSynthèse = 3;
                     ligneStatMoyennesEe = 3;
@@ -434,7 +443,7 @@ namespace Brevet_blanc
                     statListing = (Worksheet)statXlsx.Sheets.Item[4];
                     statDelta = (Worksheet)statXlsx.Sheets.Item[5];
                 }
-                if (dnb.Text == "DNB2")
+                if (dnb.Text == @"DNB2")
                 {
                     ligneStatSynthèse = 15;
                     ligneStatMoyennesEe = 15;
@@ -896,6 +905,8 @@ namespace Brevet_blanc
             RemplirDatatable(TableComposantes, lblSource.Text, "*.xls*", "Composantes", "Composantes", "AliasFichierComposantes");
             RemplirListeBox(chkLb_Notes, TableNotes);
             RemplirListeBox(chkLb_Composantes, TableComposantes);
+            lblClasses.Text = "";
+            BtnGénérerDiplomes.Enabled = false;
         }
 
         private void CopieFichiersTypeDnb(Stream input, Stream output)
@@ -910,7 +921,7 @@ namespace Brevet_blanc
             }
         }
 
-        private void RemplirDatatable(System.Data.DataTable dt, string folder, string fileType, string recherche, string nom, string alias)
+        private void RemplirDatatable(DataTable dt, string folder, string fileType, string recherche, string nom, string alias)
         {
             dt.Rows.Clear();
             dt.Columns.Clear();
@@ -927,7 +938,7 @@ namespace Brevet_blanc
                 }
         }
 
-        private void RemplirListeBox(CheckedListBox lsb, System.Data.DataTable dt)
+        private void RemplirListeBox(CheckedListBox lsb, DataTable dt)
         {
             lsb.Items.Clear();
             foreach (DataRow ligne in dt.Rows)
@@ -969,15 +980,15 @@ namespace Brevet_blanc
         private string NumDnb()
         {
             string numDnb = "";
-            if (rdbDnb1.Checked == true) numDnb = "DNB1";
-            if (rdbDnb2.Checked == true) numDnb = "DNB2";
+            if (rdbDnb1.Checked) numDnb = "DNB1";
+            if (rdbDnb2.Checked) numDnb = "DNB2";
             return numDnb;
         }
 
         private void chkLb_Notes_SelectedIndexChanged(object sender, EventArgs e)
         {
-            System.Data.DataTable tableNotes = new System.Data.DataTable();
-            System.Data.DataTable tableComposantes = new System.Data.DataTable();
+            DataTable tableNotes = new DataTable();
+            DataTable tableComposantes = new DataTable();
             tableNotes.Columns.Add("notes", typeof(string));
             tableComposantes.Columns.Add("composantes", typeof(string));
             int i = 0;
@@ -1047,7 +1058,7 @@ namespace Brevet_blanc
             using (DataSet ds = new DataSet())
             {
                 //Add tables
-                ds.Tables.AddRange(new DataTable[] { firstDataTable.Copy(), secondDataTable.Copy() });
+                ds.Tables.AddRange(new[] { firstDataTable.Copy(), secondDataTable.Copy() });
 
                 //Get Columns for DataRelation
                 DataColumn[] firstColumns = new DataColumn[ds.Tables[0].Columns.Count];
@@ -1080,7 +1091,7 @@ namespace Brevet_blanc
                 foreach (DataRow parentrow in ds.Tables[0].Rows)
                 {
                     DataRow[] childrows = parentrow.GetChildRows(r1);
-                    if (childrows == null || childrows.Length == 0)
+                    if (childrows.Length == 0)
                         resultDataTable.LoadDataRow(parentrow.ItemArray, true);
                 }
 
@@ -1088,7 +1099,7 @@ namespace Brevet_blanc
                 foreach (DataRow parentrow in ds.Tables[1].Rows)
                 {
                     DataRow[] childrows = parentrow.GetChildRows(r2);
-                    if (childrows == null || childrows.Length == 0)
+                    if (childrows.Length == 0)
                         resultDataTable.LoadDataRow(parentrow.ItemArray, true);
                 }
                 resultDataTable.EndLoadData();
