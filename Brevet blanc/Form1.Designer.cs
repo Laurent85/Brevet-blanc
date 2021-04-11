@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Principal));
             this.BtnGénérerDiplomes = new System.Windows.Forms.Button();
             this.BtnGénérerStats = new System.Windows.Forms.Button();
             this.chkLb_Notes = new System.Windows.Forms.CheckedListBox();
@@ -57,6 +58,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.ThreadStatistiques = new System.ComponentModel.BackgroundWorker();
             this.lblClasses = new System.Windows.Forms.Label();
+            this.btnDossierRésultats = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numDelta)).BeginInit();
@@ -282,11 +284,11 @@
             this.rdbSansOral.TabStop = true;
             this.rdbSansOral.Text = "Sans oral";
             this.rdbSansOral.UseVisualStyleBackColor = true;
+            this.rdbSansOral.CheckedChanged += new System.EventHandler(this.rdbSansOral_CheckedChanged);
             // 
             // rdbAvecOral
             // 
             this.rdbAvecOral.AutoSize = true;
-            this.rdbAvecOral.Enabled = false;
             this.rdbAvecOral.Location = new System.Drawing.Point(12, 27);
             this.rdbAvecOral.Name = "rdbAvecOral";
             this.rdbAvecOral.Size = new System.Drawing.Size(70, 17);
@@ -294,6 +296,7 @@
             this.rdbAvecOral.TabStop = true;
             this.rdbAvecOral.Text = "Avec oral";
             this.rdbAvecOral.UseVisualStyleBackColor = true;
+            this.rdbAvecOral.CheckedChanged += new System.EventHandler(this.rdbAvecOral_CheckedChanged);
             // 
             // numDelta
             // 
@@ -365,6 +368,16 @@
             this.lblClasses.Size = new System.Drawing.Size(0, 16);
             this.lblClasses.TabIndex = 24;
             // 
+            // btnDossierRésultats
+            // 
+            this.btnDossierRésultats.Location = new System.Drawing.Point(246, 505);
+            this.btnDossierRésultats.Name = "btnDossierRésultats";
+            this.btnDossierRésultats.Size = new System.Drawing.Size(186, 23);
+            this.btnDossierRésultats.TabIndex = 25;
+            this.btnDossierRésultats.Text = "Ouvrir le dossier des résultats";
+            this.btnDossierRésultats.UseVisualStyleBackColor = true;
+            this.btnDossierRésultats.Click += new System.EventHandler(this.btnDossierRésultats_Click);
+            // 
             // Principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -373,6 +386,7 @@
             this.BackgroundImage = global::Brevet_blanc.Properties.Resources.Fond;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(915, 557);
+            this.Controls.Add(this.btnDossierRésultats);
             this.Controls.Add(this.lblClasses);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.pictureBox3);
@@ -397,6 +411,7 @@
             this.Controls.Add(this.BtnGénérerDiplomes);
             this.Controls.Add(this.panel1);
             this.DoubleBuffered = true;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Principal";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Brevet blanc";
@@ -445,6 +460,7 @@
         private System.Windows.Forms.Label label4;
         private System.ComponentModel.BackgroundWorker ThreadStatistiques;
         private System.Windows.Forms.Label lblClasses;
+        private System.Windows.Forms.Button btnDossierRésultats;
     }
 }
 

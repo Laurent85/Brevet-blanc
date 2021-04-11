@@ -24,32 +24,34 @@ namespace Brevet_blanc
         public int RowCount;
         public string Classe;
         public string Progression;
+        public string StrPath2;
+        public string CheminFichierType;
 
         private void Principal_Load(object sender, EventArgs e)
         {
             TuerProcessus("Excel");
-            lblSource.Text = @"X:\Logiciels\";
+            if (lblSource.Text == "")
+                lblSource.Text = @"C:\Users\User\Desktop\";
             lblDestination.Text = @"C:\Users\User\Desktop\";
             rdbSansOral.Checked = true;
             rdbDnb1.Checked = true;
-            try
-            {
-                RemplirDatatable(TableNotes, lblSource.Text, "*.xls*", "Recapitulatif", "Notes", "AliasFichierNotes");
-                RemplirDatatable(TableComposantes, lblSource.Text, "*.xls*", "Composantes", "Composantes",
-                    "AliasFichierComposantes");
-                RemplirListeBox(chkLb_Notes, TableNotes);
-            }
-            catch
-            {
-                // ignored
-            }
 
-            for (int i = 0; i < 5; i++)
-                chkLb_Notes.SetItemChecked(i, true);
+            if (!Directory.Exists(lblDestination.Text + @"DNB"))
+                Directory.CreateDirectory(lblDestination.Text + @"DNB");
+            if (!Directory.Exists(lblDestination.Text + @"DNB\Composantes"))
+                Directory.CreateDirectory(lblDestination.Text + @"DNB\Composantes");
+            if (!Directory.Exists(lblDestination.Text + @"DNB\Modèles"))
+                Directory.CreateDirectory(lblDestination.Text + @"DNB\Modèles");
+            if (!Directory.Exists(lblDestination.Text + @"DNB\Notes"))
+                Directory.CreateDirectory(lblDestination.Text + @"DNB\Notes");
+
+            CopieDesFichiersTypes();
+
+            RemplirDatatable(TableNotes, lblSource.Text, "*.xls*", "Recapitulatif", "Notes", "AliasFichierNotes");
+            RemplirDatatable(TableComposantes, lblSource.Text, "*.xls*", "Composantes", "Composantes", "AliasFichierComposantes");
+            RemplirListeBox(chkLb_Notes, TableNotes);
+
             RemplirListeBox(chkLb_Composantes, TableComposantes);
-            for (int i = 0; i < 5; i++)
-                chkLb_Composantes.SetItemChecked(i, true);
-            chkLb_Notes_SelectedIndexChanged(sender, e);
         }
 
         private void BtnChoisirSource(object sender, EventArgs e)
@@ -77,6 +79,21 @@ namespace Brevet_blanc
             Directory.CreateDirectory(lblDestination.Text + @"DNB\Composantes");
             Directory.CreateDirectory(lblDestination.Text + @"DNB\Modèles");
             Directory.CreateDirectory(lblDestination.Text + @"DNB\Notes");
+
+            CopieDesFichiersTypes();
+
+            DialogResult dialogResult = MessageBox.Show(@"Voulez-vous modifier le fichier Word ?", @"Modification", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                if (rdbSansOral.Checked)
+                    System.Diagnostics.Process.Start(lblDestination.Text + @"DNB\Modèles\Dnb_sans_oral.docx");
+                if (rdbAvecOral.Checked)
+                    System.Diagnostics.Process.Start(lblDestination.Text + @"DNB\Modèles\Dnb_avec_oral.docx");
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                //do something else
+            }
         }
 
         private void BtnGénérerDnb(object sender, EventArgs e)
@@ -86,28 +103,57 @@ namespace Brevet_blanc
             ThreadDiplomes.RunWorkerAsync();
         }
 
+        private void CopieDesFichiersTypes()
+        {
+            if (rdbSansOral.Checked)
+            {
+                Directory.GetFiles(lblDestination.Text + @"DNB\", "*.*");
+
+                var strPath = lblDestination.Text + @"DNB\Modèles\Dnb_sans_oral.xlsx";
+                if (File.Exists(strPath)) File.Delete(strPath);
+                var assembly = Assembly.GetExecutingAssembly();
+                var input = assembly.GetManifestResourceStream("Brevet_blanc.Resources.Type_dnb.xlsx");
+                var output = File.Open(strPath, FileMode.CreateNew);
+                CopieFichiersTypeDnb(input, output);
+                input?.Dispose();
+                output.Dispose();
+
+                var strPath1 = lblDestination.Text + @"DNB\Modèles\Dnb_sans_oral.docx";
+                if (File.Exists(strPath1)) File.Delete(strPath1);
+                var assembly1 = Assembly.GetExecutingAssembly();
+                var input1 = assembly1.GetManifestResourceStream("Brevet_blanc.Resources.Type_dnb.docx");
+                var output1 = File.Open(strPath1, FileMode.CreateNew);
+                CopieFichiersTypeDnb(input1, output1);
+                input1?.Dispose();
+                output1.Dispose();
+            }
+
+            if (rdbAvecOral.Checked)
+            {
+                Directory.GetFiles(lblDestination.Text + @"DNB\", "*.*");
+
+                var strPath = lblDestination.Text + @"DNB\Modèles\Dnb_avec_oral.xlsx";
+                if (File.Exists(strPath)) File.Delete(strPath);
+                var assembly = Assembly.GetExecutingAssembly();
+                var input = assembly.GetManifestResourceStream("Brevet_blanc.Resources.Type_dnb_oral.xlsx");
+                var output = File.Open(strPath, FileMode.CreateNew);
+                CopieFichiersTypeDnb(input, output);
+                input?.Dispose();
+                output.Dispose();
+
+                var strPath1 = lblDestination.Text + @"DNB\Modèles\Dnb_avec_oral.docx";
+                if (File.Exists(strPath1)) File.Delete(strPath1);
+                var assembly1 = Assembly.GetExecutingAssembly();
+                var input1 = assembly1.GetManifestResourceStream("Brevet_blanc.Resources.Type_dnb_oral.docx");
+                var output1 = File.Open(strPath1, FileMode.CreateNew);
+                CopieFichiersTypeDnb(input1, output1);
+                input1?.Dispose();
+                output1.Dispose();
+            }
+        }
+
         private void ThreadDiplomesMéthode(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            Directory.GetFiles(lblDestination.Text + @"DNB\", "*.*");
-
-            var strPath = lblDestination.Text + @"DNB\Modèles\Dnb_sans_oral.xlsx";
-            if (File.Exists(strPath)) File.Delete(strPath);
-            var assembly = Assembly.GetExecutingAssembly();
-            var input = assembly.GetManifestResourceStream("Brevet_blanc.Resources.Type_dnb.xlsx");
-            var output = File.Open(strPath, FileMode.CreateNew);
-            CopieFichiersTypeDnb(input, output);
-            input?.Dispose();
-            output.Dispose();
-
-            var strPath1 = lblDestination.Text + @"DNB\Modèles\Dnb_sans_oral.docx";
-            if (File.Exists(strPath1)) File.Delete(strPath1);
-            var assembly1 = Assembly.GetExecutingAssembly();
-            var input1 = assembly1.GetManifestResourceStream("Brevet_blanc.Resources.Type_dnb.docx");
-            var output1 = File.Open(strPath1, FileMode.CreateNew);
-            CopieFichiersTypeDnb(input1, output1);
-            input1?.Dispose();
-            output1.Dispose();
-
             #region TraductionComposantes
 
             string nomduFichierComposantes = "";
@@ -122,9 +168,16 @@ namespace Brevet_blanc
                         nomduFichierComposantes = ligne[0].ToString();  //Traduction du fichier date vers son vrai nom
                     }
                 }
-                var strPath2 = lblDestination.Text + @"DNB\Modèles\Dnb_sans_oral.xlsx";
+                if (rdbSansOral.Checked)
+                {
+                    StrPath2 = lblDestination.Text + @"DNB\Modèles\Dnb_sans_oral.xlsx";
+                }
+                else
+                {
+                    StrPath2 = lblDestination.Text + @"DNB\Modèles\Dnb_avec_oral.xlsx";
+                }
                 var appExcel1 = new Microsoft.Office.Interop.Excel.Application();
-                var excelDocument1 = appExcel1.Workbooks.Open(strPath2);
+                var excelDocument1 = appExcel1.Workbooks.Open(StrPath2);
 
                 var récapitulatif = (Worksheet)excelDocument1.Sheets.Item[1];
                 var épreuvesEcrites = (Worksheet)excelDocument1.Sheets.Item[2];
@@ -134,90 +187,99 @@ namespace Brevet_blanc
                 Worksheet worksheet = excelDocument.ActiveSheet;
 
                 var a3 = (string)(worksheet.Cells[3, 1] as Range)?.Value;
-                Classe = a3.Substring(0, 2);
-                File.Delete(lblDestination.Text + @"DNB\" + NumDnb() + "-" + Classe + @".xlsx");
-                File.Delete(lblDestination.Text + @"DNB\" + NumDnb() + "-" + Classe + @".pdf");
-                File.Delete(lblDestination.Text + @"DNB\Statistiques.xlsx");
-                File.Delete(lblDestination.Text + @"DNB\Statistiques.pdf");
-                var effectifTemp = a3.Substring(a3.Length - 2);
-                int effectif = int.Parse(effectifTemp);
-
-                var début = worksheet.Cells[4, 1];
-                var fin = worksheet.Cells[11, effectif + 2];
-                var range = worksheet.Range[début, fin];
-
-                RowCount = range.Cells.Count;
-                k = 0;
-                Progression = "Traduction couleurs composantes en points...";
-                foreach (Range element in range.Cells) //Transformation des couleurs en points
+                if (a3 != null)
                 {
-                    if (element.Font.ColorIndex == -5) //Rouge
-                        element.Value2 = 10;
-                    if (element.Font.ColorIndex == 1) //Orange
-                        element.Value2 = 25;
-                    if (element.Font.ColorIndex == 2) //Bleu
-                        element.Value2 = 40;
-                    if (element.Font.ColorIndex == 3) //Vert
-                        element.Value2 = 50;
-                    k++;
-                    ThreadDiplomes.ReportProgress(k);
-                }
+                    Classe = a3.Substring(0, 2);
+                    File.Delete(lblDestination.Text + @"DNB\" + NumDnb() + "-" + Classe + @".xlsx");
+                    File.Delete(lblDestination.Text + @"DNB\" + NumDnb() + "-" + Classe + @".pdf");
+                    File.Delete(lblDestination.Text + @"DNB\Statistiques.xlsx");
+                    File.Delete(lblDestination.Text + @"DNB\Statistiques.pdf");
+                    var effectifTemp = a3.Substring(a3.Length - 2);
+                    int effectif = int.Parse(effectifTemp);
 
-                appExcel.DisplayAlerts = false;
-                excelDocument.SaveAs(lblDestination.Text + @"DNB\DNB-" + Classe);
+                    var début = worksheet.Cells[4, 1];
+                    var fin = worksheet.Cells[11, effectif + 2];
+                    var range = worksheet.Range[début, fin];
 
-                #endregion TraductionComposantes
-
-                #region CopieNomsEtComposantes
-
-                var appExcel2 = new Microsoft.Office.Interop.Excel.Application();
-                var excelDocument2 = appExcel2.Workbooks.Open(lblDestination.Text + @"DNB\DNB-" + Classe);
-                Worksheet worksheet2 = excelDocument2.ActiveSheet;
-
-                RowCount = effectif;
-                k = 0;
-                Progression = "Copie du nom des élèves et de la classe...";
-                for (int i = 2; i <= effectif + 1; i++) //Copie du nom des élèves et de la classe
-                {
-                    récapitulatif.Cells[i, 1].Value = worksheet.Cells[3, i].Value.ToString();
-                    récapitulatif.Cells[i, 2].Value = Classe;
-                    épreuvesEcrites.Cells[i, 1].Value = worksheet.Cells[3, i].Value.ToString();
-                    k++;
-                    ThreadDiplomes.ReportProgress(k);
-                }
-
-                RowCount = effectif;
-                k = 0;
-                Progression = "Copie des points des composantes...";
-                for (int i = 2; i <= effectif + 1; i++) //Copie des points des composantes
-                {
-                    for (int j = 3; j <= 10; j++)
+                    RowCount = range.Cells.Count;
+                    k = 0;
+                    Progression = "Traduction couleurs composantes en points...";
+                    foreach (Range element in range.Cells) //Transformation des couleurs en points
                     {
-                        if (worksheet2.Cells[j + 1, i].Value != null)
-                            récapitulatif.Cells[i, j].Value = worksheet2.Cells[j + 1, i].Value.ToString();
+                        if (element.Value2 != null)
+                        {
+                            if ((element.Font.ColorIndex == -5) || (element.Value2.ToString() == "NA")) //Rouge
+                                element.Value2 = 10;
+                            //if (element.Font.ColorIndex == -7) //Noir
+                            element.Value2 = element.Value2;
+                            if ((element.Font.ColorIndex == 1) || (element.Value2.ToString() == "PA")) //Orange
+                                element.Value2 = 25;
+                            if ((element.Font.ColorIndex == 2) || (element.Value2.ToString() == "A")) //Bleu
+                                element.Value2 = 40;
+                            if ((element.Font.ColorIndex == 3) || (element.Value2.ToString() == "D")) //Vert
+                                element.Value2 = 50;
+                        }
+                        k++;
+                        ThreadDiplomes.ReportProgress(k);
                     }
-                    k++;
-                    ThreadDiplomes.ReportProgress(k);
+
+                    appExcel.DisplayAlerts = false;
+                    excelDocument.SaveAs(lblDestination.Text + @"DNB\DNB-" + Classe);
+
+                    #endregion TraductionComposantes
+
+                    #region CopieNomsEtComposantes
+
+                    var appExcel2 = new Microsoft.Office.Interop.Excel.Application();
+                    var excelDocument2 = appExcel2.Workbooks.Open(lblDestination.Text + @"DNB\DNB-" + Classe);
+                    Worksheet worksheet2 = excelDocument2.ActiveSheet;
+
+                    RowCount = effectif;
+                    k = 0;
+                    Progression = "Copie du nom des élèves et de la classe...";
+                    for (int i = 2; i <= effectif + 1; i++) //Copie du nom des élèves et de la classe
+                    {
+                        récapitulatif.Cells[i, 1].Value = worksheet.Cells[3, i].Value.ToString();
+                        récapitulatif.Cells[i, 2].Value = Classe;
+                        épreuvesEcrites.Cells[i, 1].Value = worksheet.Cells[3, i].Value.ToString();
+                        k++;
+                        ThreadDiplomes.ReportProgress(k);
+                    }
+
+                    RowCount = effectif;
+                    k = 0;
+                    Progression = "Copie des points des composantes...";
+                    for (int i = 2; i <= effectif + 1; i++) //Copie des points des composantes
+                    {
+                        for (int j = 3; j <= 10; j++)
+                        {
+                            if (worksheet2.Cells[j + 1, i].Value != null)
+                                récapitulatif.Cells[i, j].Value = worksheet2.Cells[j + 1, i].Value.ToString();
+                        }
+                        k++;
+                        ThreadDiplomes.ReportProgress(k);
+                    }
+
+                    var cells = récapitulatif.Range[
+                        "A" + (effectif + 2) + ":A500"]; //Nettoyage bas tableau récapitulatif
+                    var del = cells.EntireRow;
+                    del.Delete();
+
+                    appExcel1.DisplayAlerts = false;
+                    excelDocument1.SaveAs(lblDestination.Text + @"DNB\" + NumDnb() + "-" + Classe);
+
+                    excelDocument2.Close(0);
+                    excelDocument.Close(0);
+                    excelDocument1.Close(0);
+
+                    appExcel1.Quit();
+                    appExcel.Quit();
+                    appExcel2.Quit();
+
+                    Marshal.ReleaseComObject(appExcel);
+                    Marshal.ReleaseComObject(appExcel1);
+                    Marshal.ReleaseComObject(appExcel2);
                 }
-
-                var cells = récapitulatif.Range["A" + (effectif + 2) + ":A500"]; //Nettoyage bas tableau récapitulatif
-                var del = cells.EntireRow;
-                del.Delete();
-
-                appExcel1.DisplayAlerts = false;
-                excelDocument1.SaveAs(lblDestination.Text + @"DNB\" + NumDnb() + "-" + Classe);
-
-                excelDocument2.Close(0);
-                excelDocument.Close(0);
-                excelDocument1.Close(0);
-
-                appExcel1.Quit();
-                appExcel.Quit();
-                appExcel2.Quit();
-
-                Marshal.ReleaseComObject(appExcel);
-                Marshal.ReleaseComObject(appExcel1);
-                Marshal.ReleaseComObject(appExcel2);
             }
 
             #endregion CopieNomsEtComposantes
@@ -240,60 +302,118 @@ namespace Brevet_blanc
                 Worksheet worksheet = excelDocument.ActiveSheet;
 
                 var b1 = (string)(worksheet.Cells[1, 2] as Range)?.Value;
-                Classe = b1.Substring(0, 2);
-                var effectifTemp = b1.Substring(b1.Length - 2);
-                int effectif = int.Parse(effectifTemp);
-
-                appExcel.DisplayAlerts = false;
-                var appExcel2 = new Microsoft.Office.Interop.Excel.Application();
-                var excelDocument2 = appExcel2.Workbooks.Open(lblDestination.Text + @"DNB\" + NumDnb() + "-" + Classe);
-                var récapitulatif = (Worksheet)excelDocument2.Sheets.Item[1];
-                var épreuvesEcrites2 = (Worksheet)excelDocument2.Sheets.Item[2];
-
-                RowCount = effectif;
-                k = 0;
-                Progression = "Copie des notes...";
-                for (int i = 2; i <= effectif + 1; i++) //Copie des notes
+                if (b1 != null)
                 {
-                    int m = 11;
-                    int totalPoints = 0;
-                    for (int j = 2; j <= 8; j++)
+                    Classe = b1.Substring(0, 2);
+                    var effectifTemp = b1.Substring(b1.Length - 2);
+                    int effectif = int.Parse(effectifTemp);
+
+                    appExcel.DisplayAlerts = false;
+                    var appExcel2 = new Microsoft.Office.Interop.Excel.Application();
+                    var excelDocument2 =
+                        appExcel2.Workbooks.Open(lblDestination.Text + @"DNB\" + NumDnb() + "-" + Classe);
+                    var récapitulatif = (Worksheet)excelDocument2.Sheets.Item[1];
+                    var épreuvesEcrites2 = (Worksheet)excelDocument2.Sheets.Item[2];
+
+                    RowCount = effectif;
+                    k = 0;
+                    Progression = "Copie des notes...";
+                    if (rdbSansOral.Checked)
                     {
-                        if (worksheet.Cells[i + 3, j + 9].Value != null)
+                        for (int i = 2; i <= effectif + 1; i++) //Copie des notes
                         {
-                            épreuvesEcrites2.Cells[i, j].Value = worksheet.Cells[i + 3, j + 9].Value;
-                            m = m + 1;
-                            if (m == 14) m = 15;
-                            totalPoints = totalPoints + Bareme(j);
-                        }
-                        if (worksheet.Cells[i + 3, j + 9].Value == null) //Gestion des cellules vides
-                        {
-                            récapitulatif.Cells[i, j + m].value = "";
-                            épreuvesEcrites2.Cells[i, 1].value = épreuvesEcrites2.Cells[i, 1].value + "*";
-                            m = m + 1;
-                            if (m == 14) m = 15;
+                            int m = 11;
+                            int totalPoints = 0;
+                            for (int j = 2; j <= 8; j++)
+                            {
+                                if (worksheet.Cells[i + 3, j + 9].Value != null)
+                                {
+                                    épreuvesEcrites2.Cells[i, j].Value = worksheet.Cells[i + 3, j + 9].Value;
+                                    m = m + 1;
+                                    if (m == 14) m = 15;
+                                    totalPoints = totalPoints + Bareme(j);
+                                }
+                                if (worksheet.Cells[i + 3, j + 9].Value == null) //Gestion des cellules vides
+                                {
+                                    récapitulatif.Cells[i, j + m].value = "";
+                                    épreuvesEcrites2.Cells[i, 1].value = épreuvesEcrites2.Cells[i, 1].value + "*";
+                                    m = m + 1;
+                                    if (m == 14) m = 15;
+                                }
+                            }
+                            récapitulatif.Range["AR" + i].Value = totalPoints + 400;
+                            récapitulatif.Range["AT" + i].Value = totalPoints;
+
+                            k++;
+                            ThreadDiplomes.ReportProgress(k);
                         }
                     }
-                    récapitulatif.Range["AR" + i].Value = totalPoints + 400;
-                    récapitulatif.Range["AT" + i].Value = totalPoints;
 
-                    k++;
-                    ThreadDiplomes.ReportProgress(k);
+                    if (rdbAvecOral.Checked)
+                    {
+                        for (int i = 2; i <= effectif + 1; i++) //Copie des notes
+                        {
+                            int m = 11;
+                            int totalPoints = 0;
+                            int totalOral = 0;
+                            for (int j = 2; j <= 9; j++)
+                            {
+                                if (worksheet.Cells[i + 3, j + 9].Value != null)
+                                {
+                                    épreuvesEcrites2.Cells[i, j].Value = worksheet.Cells[i + 3, j + 9].Value;
+                                    m = m + 1;
+                                    if (m == 14) m = 15;
+                                    if (j == 9)
+                                    {
+                                        totalOral = totalOral + Bareme(j);
+                                    }
+                                    else
+                                    {
+                                        totalPoints = totalPoints + Bareme(j);
+                                    }
+                                }
+                                if (worksheet.Cells[i + 3, j + 9].Value == null) //Gestion des cellules vides
+                                {
+                                    if (j == 9)
+                                    {
+                                        récapitulatif.Cells[i, 49].value = "";
+                                        épreuvesEcrites2.Cells[i, 1].value = épreuvesEcrites2.Cells[i, 1].value + "*";
+                                        m = m + 1;
+                                        if (m == 14) m = 15;
+                                    }
+                                    else
+                                    {
+                                        récapitulatif.Cells[i, j + m].value = "";
+                                        épreuvesEcrites2.Cells[i, 1].value = épreuvesEcrites2.Cells[i, 1].value + "*";
+                                        m = m + 1;
+                                        if (m == 14) m = 15;
+                                    }
+                                }
+                            }
+                            récapitulatif.Range["AR" + i].Value = totalPoints + totalOral + 400;
+                            récapitulatif.Range["AT" + i].Value = totalPoints;
+                            récapitulatif.Range["AY" + i].Value = totalOral;
+
+                            k++;
+                            ThreadDiplomes.ReportProgress(k);
+                        }
+                    }
+
+                    var cells = épreuvesEcrites2.Range[
+                        "A" + (effectif + 2) + ":A500"]; //Nettoyage bas tableau récapitulatif
+                    var del = cells.EntireRow;
+                    del.Delete();
+
+                    appExcel2.DisplayAlerts = false;
+                    excelDocument2.SaveAs(lblDestination.Text + @"DNB\" + NumDnb() + "-" + Classe);
+                    excelDocument2.Close(0);
+                    excelDocument.Close(0);
+                    appExcel.Quit();
+                    appExcel2.Quit();
+
+                    Marshal.ReleaseComObject(appExcel);
+                    Marshal.ReleaseComObject(appExcel2);
                 }
-
-                var cells = épreuvesEcrites2.Range["A" + (effectif + 2) + ":A500"]; //Nettoyage bas tableau récapitulatif
-                var del = cells.EntireRow;
-                del.Delete();
-
-                appExcel2.DisplayAlerts = false;
-                excelDocument2.SaveAs(lblDestination.Text + @"DNB\" + NumDnb() + "-" + Classe);
-                excelDocument2.Close(0);
-                excelDocument.Close(0);
-                appExcel.Quit();
-                appExcel2.Quit();
-
-                Marshal.ReleaseComObject(appExcel);
-                Marshal.ReleaseComObject(appExcel2);
             }
 
             #endregion CopieNotes
@@ -319,7 +439,16 @@ namespace Brevet_blanc
                     if ((fichier.Contains(fichier1.ToString().Substring(0, 2))) && (fichier.Contains(NumDnb())))
                     {
                         var appWord = new Microsoft.Office.Interop.Word.Application();
-                        var wordDocument = appWord.Documents.Add(lblDestination.Text + @"DNB\Modèles\Dnb_sans_oral.docx");
+                        if (rdbSansOral.Checked)
+                        {
+                            CheminFichierType = lblDestination.Text + @"DNB\Modèles\Dnb_sans_oral.docx";
+                        }
+                        else
+                        {
+                            CheminFichierType = lblDestination.Text + @"DNB\Modèles\Dnb_avec_oral.docx";
+                        }
+
+                        var wordDocument = appWord.Documents.Add(CheminFichierType);
                         appWord.Visible = false;
                         wordDocument.MailMerge.MainDocumentType = WdMailMergeMainDocType.wdFormLetters;
                         var nomDuFichierDnb = Path.GetFileNameWithoutExtension(fichier);
@@ -357,7 +486,7 @@ namespace Brevet_blanc
 
                 if (File.Exists(lblDestination.Text + @"DNB\Composantes\DNB-" + classe + @".xlsx"))
                     File.Delete(lblDestination.Text + @"DNB\Composantes\DNB-" + classe + @".xlsx");
-                File.Move(lblDestination.Text + @"DNB\DNB-" + classe + @".xlsx", lblDestination.Text + @"DNB\Composantes\DNB-" + classe + @".xlsx");
+                File.Move(lblDestination.Text + @"DNB\DNB-" + classe + @".xlsx", lblDestination.Text + @"DNB\Composantes\" + NumDnb() + "-" + classe + @".xlsx");
 
                 if (File.Exists(lblDestination.Text + @"DNB\Notes\" + NumDnb() + "-" + classe + @".xlsx"))
                     File.Delete(lblDestination.Text + @"DNB\Notes\" + NumDnb() + "-" + classe + @".xlsx");
@@ -472,6 +601,7 @@ namespace Brevet_blanc
                 {
                     #region initialisation des variables
                     var fichierDnbXlsx = Path.GetFileName(file);
+                    statSynthèse.Range["A1"].Value = "Année scolaire 2020-2021";
                     if (fichierDnbXlsx.Contains(dnb.Text) && fichierDnbXlsx.Contains("xlsx")) //DNB1 ou DNB2
                     {
                         if ((ligneStatSynthèse == 3) || (ligneStatSynthèse == 15))
@@ -528,6 +658,7 @@ namespace Brevet_blanc
 
                                     int delta = Convert.ToInt32(dnbRécapitulatif.Range["AR" + ligneEleve].Value * 12 / 20 -
                                                 dnbRécapitulatif.Range["AE" + ligneEleve].Value);
+                                    int delta1 = Convert.ToInt32(dnbRécapitulatif.Range["AE" + ligneEleve].Value - dnbRécapitulatif.Range["AS" + ligneEleve].Value);
 
                                     if ((delta <= numDelta.Value) && (ligneStatDelta > 31))
                                     {
@@ -539,6 +670,18 @@ namespace Brevet_blanc
                                     {
                                         statDelta.Range["A" + ligneStatDelta].Value =
                                             dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + dnbRécapitulatif.Range["A" + ligneEleve].Value.ToString() + "  (manque " + delta + " points pour mention AB)";
+                                        ligneStatDelta++;
+                                    }
+                                    if ((delta1 <= numDelta.Value) && (ligneStatDelta > 31))
+                                    {
+                                        statDelta.Range["E" + (ligneStatDelta - 29)].Value =
+                                            dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + dnbRécapitulatif.Range["A" + ligneEleve].Value.ToString() + "  (obtention pour " + delta1 + " points seulement)";
+                                        ligneStatDelta++;
+                                    }
+                                    if ((delta1 <= numDelta.Value) && (ligneStatDelta <= 31))
+                                    {
+                                        statDelta.Range["A" + ligneStatDelta].Value =
+                                            dnbRécapitulatif.Range["B" + ligneEleve].Value.ToString() + " - " + dnbRécapitulatif.Range["A" + ligneEleve].Value.ToString() + "  (obtention pour " + delta1 + " points seulement)";
                                         ligneStatDelta++;
                                     }
                                 }
@@ -693,21 +836,80 @@ namespace Brevet_blanc
                         #endregion
                         #region Calcul des moyennes par épreuve
                         var colonne = 'B';
-                        for (int i = 1; i < 8; i++)
+                        if (rdbSansOral.Checked)
                         {
-                            int barême = int.Parse(dnbEpreuvesEcrites.Range[colonne + "1"].Value.ToString().Split(new[] { '/', ')' })[1]);
+                            for (int i = 1; i < 8; i++)
+                            {
+                                int barême = int.Parse(dnbEpreuvesEcrites.Range[colonne + "1"].Value.ToString()
+                                    .Split(new[] { '/', ')' })[1]);
 
-                            dnbEpreuvesEcrites.Range[colonne.ToString() + (effectif + 3)].Formula = "=AVERAGE(" + colonne.ToString() + "2:" + colonne.ToString() + (effectif + 2) + ")";
+                                dnbEpreuvesEcrites.Range[colonne.ToString() + (effectif + 3)].Formula =
+                                    "=AVERAGE(" + colonne.ToString() + "2:" + colonne.ToString() + (effectif + 2) + ")";
 
-                            statMoyennes.Range[colonne.ToString() + ligneStatMoyennesEe].Value = Math.Round(
-                                float.Parse(dnbEpreuvesEcrites.Range[colonne.ToString() + (effectif + 3)].Value.ToString()) / barême * 20, 2);
+                                statMoyennes.Range[colonne.ToString() + ligneStatMoyennesEe].Value = Math.Round(
+                                    float.Parse(dnbEpreuvesEcrites.Range[colonne.ToString() + (effectif + 3)].Value
+                                        .ToString()) / barême * 20, 2);
 
-                            colonne++;
+                                colonne++;
+                            }
                         }
+
+                        if ((rdbAvecOral.Checked) && (fichierDnbXlsx.Contains("DNB1")))
+                        {
+                            colonne = 'B';
+                            for (int i = 1; i < 8; i++)
+                            {
+                                int barême = int.Parse(dnbEpreuvesEcrites.Range[colonne + "1"].Value.ToString()
+                                    .Split(new[] { '/', ')' })[1]);
+
+                                dnbEpreuvesEcrites.Range[colonne.ToString() + (effectif + 3)].Formula =
+                                    "=AVERAGE(" + colonne.ToString() + "2:" + colonne.ToString() + (effectif + 2) + ")";
+
+                                statMoyennes.Range[colonne.ToString() + ligneStatMoyennesEe].Value = Math.Round(
+                                    float.Parse(dnbEpreuvesEcrites.Range[colonne.ToString() + (effectif + 3)].Value
+                                        .ToString()) / barême * 20, 2);
+
+                                colonne++;
+                            }
+                        }
+
+                        if ((rdbAvecOral.Checked) && (fichierDnbXlsx.Contains("DNB2")))
+                        {
+                            colonne = 'B';
+                            for (int i = 1; i < 9; i++)
+                            {
+                                int barême = int.Parse(dnbEpreuvesEcrites.Range[colonne + "1"].Value.ToString()
+                                    .Split(new[] { '/', ')' })[1]);
+
+                                dnbEpreuvesEcrites.Range[colonne.ToString() + (effectif + 3)].Formula =
+                                    "=AVERAGE(" + colonne.ToString() + "2:" + colonne.ToString() + (effectif + 2) + ")";
+
+                                statMoyennes.Range[colonne.ToString() + ligneStatMoyennesEe].Value = Math.Round(
+                                    float.Parse(dnbEpreuvesEcrites.Range[colonne.ToString() + (effectif + 3)].Value
+                                        .ToString()) / barême * 20, 2);
+
+                                colonne++;
+                            }
+                        }
+
                         #endregion
                         #region Calcul de la moyenne générale des épreuves
-                        dnbEpreuvesEcrites.Range["J" + (effectif + 3)].Formula = "=AVERAGE(B" + (effectif + 3) + ":H" + (effectif + 3) + ")";
-                        statMoyennes.Range["J" + ligneStatMoyennesEe].Value = Math.Round(float.Parse(dnbEpreuvesEcrites.Range["J" + (effectif + 3)].Value.ToString()), 2);
+
+                        if (rdbSansOral.Checked)
+                        {
+                            dnbEpreuvesEcrites.Range["J" + (effectif + 3)].Formula =
+                                "=AVERAGE(B" + (effectif + 3) + ":H" + (effectif + 3) + ")";
+                            statMoyennes.Range["J" + ligneStatMoyennesEe].Value = Math.Round(
+                                float.Parse(dnbEpreuvesEcrites.Range["J" + (effectif + 3)].Value.ToString()), 2);
+                        }
+                        if (rdbAvecOral.Checked)
+                        {
+                            dnbEpreuvesEcrites.Range["J" + (effectif + 3)].Formula =
+                                "=AVERAGE(B" + (effectif + 3) + ":I" + (effectif + 3) + ")";
+                            statMoyennes.Range["J" + ligneStatMoyennesEe].Value = Math.Round(
+                                float.Parse(dnbEpreuvesEcrites.Range["J" + (effectif + 3)].Value.ToString()), 2);
+                        }
+
                         #endregion
                         object misValue = Missing.Value;
                         dnbXlsx.Close(false, misValue, misValue);
@@ -736,16 +938,39 @@ namespace Brevet_blanc
 
                 if (nombreClasses > 0)
                 {
-                    statMoyennes.Range["A1"].Value = "Année scolaire 2018-2019";
+                    statMoyennes.Range["A1"].Value = "Année scolaire 2020-2021";
                     #region Calcul de la moyenne générale par épreuve pour le niveau
                     statMoyennes.Range["A" + (ligneStatMoyennesEe + 2)].Value = "Niveau";
                     var colonne = 'B';
-                    for (int i = 1; i < 8; i++)
+                    if (rdbSansOral.Checked)
                     {
-                        statMoyennes.Range[colonne.ToString() + (ligneStatMoyennesEe + 2)].Formula =
-                            "=AVERAGE(" + colonne + ligneStatMoyennesEeDébut + ":" + colonne + ligneStatMoyennesEe + ")";
-                        colonne++;
+                        for (int i = 1; i < 8; i++)
+                        {
+                            statMoyennes.Range[colonne.ToString() + (ligneStatMoyennesEe + 2)].Formula =
+                                "=AVERAGE(" + colonne + ligneStatMoyennesEeDébut + ":" + colonne + ligneStatMoyennesEe +
+                                ")";
+                            colonne++;
+                        }
                     }
+
+                    if (rdbAvecOral.Checked)
+                    {
+                        for (int i = 1; i < 9; i++)
+                        {
+                            if ((i == 8) && (ligneStatMoyennesEe + 2 < 13))
+                                statMoyennes.Range[colonne.ToString() + (ligneStatMoyennesEe + 2)].Formula =
+                                    "";
+                            else
+                            {
+                                statMoyennes.Range[colonne.ToString() + (ligneStatMoyennesEe + 2)].Formula =
+                                      "=AVERAGE(" + colonne + ligneStatMoyennesEeDébut + ":" + colonne +
+                                      ligneStatMoyennesEe +
+                                      ")";
+                            }
+                            colonne++;
+                        }
+                    }
+
                     #endregion
                     #region Calcul de la moyenne générale pour le niveau
                     statMoyennes.Range["J" + (ligneStatMoyennesEe + 2)].Formula =
@@ -827,7 +1052,7 @@ namespace Brevet_blanc
                 #endregion
                 if (nombreClasses > 0)
                 {
-                    statMoyennesControle.Range["A1"].Value = "Année scolaire 2018-2019";
+                    statMoyennesControle.Range["A1"].Value = "Année scolaire 2020-2021";
                     #region Calcul de la moyenne générale par épreuve pour le niveau
                     statMoyennesControle.Range["A" + (ligneStatMoyennesCc + 2)].Value = "Niveau";
 
@@ -974,6 +1199,7 @@ namespace Brevet_blanc
             if (colonne == 6) bareme = 100;
             if (colonne == 7) bareme = 25;
             if (colonne == 8) bareme = 25;
+            if (colonne == 9) bareme = 100;
             return bareme;
         }
 
@@ -1109,5 +1335,47 @@ namespace Brevet_blanc
         }
 
         #endregion
+
+        private void btnDossierRésultats_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(lblDestination.Text + @"DNB\");
+        }
+
+        private void rdbSansOral_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rdbSansOral.Checked)
+            {
+                if (Directory.Exists(lblDestination.Text + @"DNB\Modèles"))
+                    Directory.Delete(lblDestination.Text + @"DNB\Modèles", true);
+                if (!Directory.Exists(lblDestination.Text + @"DNB\Modèles"))
+                    Directory.CreateDirectory(lblDestination.Text + @"DNB\Modèles");
+                CopieDesFichiersTypes();
+            }
+            if (rdbAvecOral.Checked)
+            {
+                if (Directory.Exists(lblDestination.Text + @"DNB\Modèles"))
+                    Directory.Delete(lblDestination.Text + @"DNB\Modèles", true);
+                if (!Directory.Exists(lblDestination.Text + @"DNB\Modèles"))
+                    Directory.CreateDirectory(lblDestination.Text + @"DNB\Modèles");
+                CopieDesFichiersTypes();
+            }
+
+            DialogResult dialogResult = MessageBox.Show(@"Voulez-vous modifier le fichier Word ?", @"Modification", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                if (rdbSansOral.Checked)
+                    System.Diagnostics.Process.Start(lblDestination.Text + @"DNB\Modèles\Dnb_sans_oral.docx");
+                if (rdbAvecOral.Checked)
+                    System.Diagnostics.Process.Start(lblDestination.Text + @"DNB\Modèles\Dnb_avec_oral.docx");
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                //do something else
+            }
+        }
+
+        private void rdbAvecOral_CheckedChanged(object sender, EventArgs e)
+        {
+        }
     }
 }
