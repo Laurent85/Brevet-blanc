@@ -59,6 +59,10 @@
             this.ThreadStatistiques = new System.ComponentModel.BackgroundWorker();
             this.lblClasses = new System.Windows.Forms.Label();
             this.btnDossierRésultats = new System.Windows.Forms.Button();
+            this.txb_dates_brevet = new System.Windows.Forms.TextBox();
+            this.lblDatesBrevet = new System.Windows.Forms.Label();
+            this.lblAnnéeScolaire = new System.Windows.Forms.Label();
+            this.cbxAnnéeScolaire = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numDelta)).BeginInit();
@@ -70,7 +74,7 @@
             // BtnGénérerDiplomes
             // 
             this.BtnGénérerDiplomes.BackColor = System.Drawing.Color.Transparent;
-            this.BtnGénérerDiplomes.Location = new System.Drawing.Point(632, 305);
+            this.BtnGénérerDiplomes.Location = new System.Drawing.Point(632, 347);
             this.BtnGénérerDiplomes.Name = "BtnGénérerDiplomes";
             this.BtnGénérerDiplomes.Size = new System.Drawing.Size(199, 23);
             this.BtnGénérerDiplomes.TabIndex = 0;
@@ -80,7 +84,7 @@
             // 
             // BtnGénérerStats
             // 
-            this.BtnGénérerStats.Location = new System.Drawing.Point(632, 346);
+            this.BtnGénérerStats.Location = new System.Drawing.Point(632, 388);
             this.BtnGénérerStats.Name = "BtnGénérerStats";
             this.BtnGénérerStats.Size = new System.Drawing.Size(199, 23);
             this.BtnGénérerStats.TabIndex = 1;
@@ -93,7 +97,7 @@
             this.chkLb_Notes.BackColor = System.Drawing.Color.Linen;
             this.chkLb_Notes.CheckOnClick = true;
             this.chkLb_Notes.FormattingEnabled = true;
-            this.chkLb_Notes.Location = new System.Drawing.Point(76, 209);
+            this.chkLb_Notes.Location = new System.Drawing.Point(76, 251);
             this.chkLb_Notes.Name = "chkLb_Notes";
             this.chkLb_Notes.Size = new System.Drawing.Size(247, 244);
             this.chkLb_Notes.TabIndex = 2;
@@ -104,7 +108,7 @@
             this.chkLb_Composantes.BackColor = System.Drawing.Color.Linen;
             this.chkLb_Composantes.CheckOnClick = true;
             this.chkLb_Composantes.FormattingEnabled = true;
-            this.chkLb_Composantes.Location = new System.Drawing.Point(350, 209);
+            this.chkLb_Composantes.Location = new System.Drawing.Point(350, 251);
             this.chkLb_Composantes.Name = "chkLb_Composantes";
             this.chkLb_Composantes.Size = new System.Drawing.Size(247, 244);
             this.chkLb_Composantes.TabIndex = 3;
@@ -112,7 +116,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(246, 476);
+            this.button3.Location = new System.Drawing.Point(246, 518);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(186, 23);
             this.button3.TabIndex = 4;
@@ -126,7 +130,7 @@
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.Blue;
-            this.label1.Location = new System.Drawing.Point(113, 168);
+            this.label1.Location = new System.Drawing.Point(113, 210);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(167, 24);
             this.label1.TabIndex = 5;
@@ -138,7 +142,7 @@
             this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.Blue;
-            this.label2.Location = new System.Drawing.Point(390, 168);
+            this.label2.Location = new System.Drawing.Point(390, 210);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(164, 24);
             this.label2.TabIndex = 6;
@@ -165,7 +169,7 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(632, 414);
+            this.progressBar1.Location = new System.Drawing.Point(632, 456);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(199, 23);
             this.progressBar1.TabIndex = 8;
@@ -176,7 +180,7 @@
             this.lblCompteur.BackColor = System.Drawing.Color.Transparent;
             this.lblCompteur.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCompteur.ForeColor = System.Drawing.Color.Red;
-            this.lblCompteur.Location = new System.Drawing.Point(629, 458);
+            this.lblCompteur.Location = new System.Drawing.Point(629, 500);
             this.lblCompteur.Name = "lblCompteur";
             this.lblCompteur.Size = new System.Drawing.Size(0, 13);
             this.lblCompteur.TabIndex = 9;
@@ -187,7 +191,7 @@
             this.lblClasse.BackColor = System.Drawing.Color.Transparent;
             this.lblClasse.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblClasse.ForeColor = System.Drawing.Color.Red;
-            this.lblClasse.Location = new System.Drawing.Point(629, 389);
+            this.lblClasse.Location = new System.Drawing.Point(629, 431);
             this.lblClasse.Name = "lblClasse";
             this.lblClasse.Size = new System.Drawing.Size(0, 16);
             this.lblClasse.TabIndex = 10;
@@ -259,7 +263,7 @@
             this.panel1.BackColor = System.Drawing.Color.Transparent;
             this.panel1.Controls.Add(this.rdbDnb1);
             this.panel1.Controls.Add(this.rdbDnb2);
-            this.panel1.Location = new System.Drawing.Point(632, 209);
+            this.panel1.Location = new System.Drawing.Point(632, 251);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(94, 47);
             this.panel1.TabIndex = 19;
@@ -269,7 +273,7 @@
             this.panel2.BackColor = System.Drawing.Color.Transparent;
             this.panel2.Controls.Add(this.rdbSansOral);
             this.panel2.Controls.Add(this.rdbAvecOral);
-            this.panel2.Location = new System.Drawing.Point(734, 209);
+            this.panel2.Location = new System.Drawing.Point(734, 251);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(97, 47);
             this.panel2.TabIndex = 20;
@@ -301,7 +305,7 @@
             // numDelta
             // 
             this.numDelta.BackColor = System.Drawing.Color.Linen;
-            this.numDelta.Location = new System.Drawing.Point(734, 172);
+            this.numDelta.Location = new System.Drawing.Point(734, 214);
             this.numDelta.Name = "numDelta";
             this.numDelta.Size = new System.Drawing.Size(47, 20);
             this.numDelta.TabIndex = 21;
@@ -311,7 +315,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.BackColor = System.Drawing.Color.Transparent;
-            this.label4.Location = new System.Drawing.Point(677, 174);
+            this.label4.Location = new System.Drawing.Point(677, 216);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(32, 13);
             this.label4.TabIndex = 23;
@@ -321,7 +325,7 @@
             // 
             this.pictureBox3.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox3.Image = global::Brevet_blanc.Properties.Resources.Sigle1;
-            this.pictureBox3.Location = new System.Drawing.Point(709, 174);
+            this.pictureBox3.Location = new System.Drawing.Point(709, 216);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(20, 13);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -363,20 +367,72 @@
             this.lblClasses.BackColor = System.Drawing.Color.Transparent;
             this.lblClasses.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblClasses.ForeColor = System.Drawing.Color.Red;
-            this.lblClasses.Location = new System.Drawing.Point(644, 277);
+            this.lblClasses.Location = new System.Drawing.Point(644, 319);
             this.lblClasses.Name = "lblClasses";
             this.lblClasses.Size = new System.Drawing.Size(0, 16);
             this.lblClasses.TabIndex = 24;
             // 
             // btnDossierRésultats
             // 
-            this.btnDossierRésultats.Location = new System.Drawing.Point(246, 505);
+            this.btnDossierRésultats.Location = new System.Drawing.Point(246, 547);
             this.btnDossierRésultats.Name = "btnDossierRésultats";
             this.btnDossierRésultats.Size = new System.Drawing.Size(186, 23);
             this.btnDossierRésultats.TabIndex = 25;
             this.btnDossierRésultats.Text = "Ouvrir le dossier des résultats";
             this.btnDossierRésultats.UseVisualStyleBackColor = true;
             this.btnDossierRésultats.Click += new System.EventHandler(this.btnDossierRésultats_Click);
+            // 
+            // txb_dates_brevet
+            // 
+            this.txb_dates_brevet.BackColor = System.Drawing.Color.Linen;
+            this.txb_dates_brevet.Location = new System.Drawing.Point(191, 155);
+            this.txb_dates_brevet.Name = "txb_dates_brevet";
+            this.txb_dates_brevet.Size = new System.Drawing.Size(132, 20);
+            this.txb_dates_brevet.TabIndex = 26;
+            this.txb_dates_brevet.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // lblDatesBrevet
+            // 
+            this.lblDatesBrevet.AutoSize = true;
+            this.lblDatesBrevet.BackColor = System.Drawing.Color.Transparent;
+            this.lblDatesBrevet.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDatesBrevet.Location = new System.Drawing.Point(68, 158);
+            this.lblDatesBrevet.Name = "lblDatesBrevet";
+            this.lblDatesBrevet.Size = new System.Drawing.Size(98, 13);
+            this.lblDatesBrevet.TabIndex = 27;
+            this.lblDatesBrevet.Text = "Dates du brevet";
+            // 
+            // lblAnnéeScolaire
+            // 
+            this.lblAnnéeScolaire.AutoSize = true;
+            this.lblAnnéeScolaire.BackColor = System.Drawing.Color.Transparent;
+            this.lblAnnéeScolaire.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAnnéeScolaire.Location = new System.Drawing.Point(347, 158);
+            this.lblAnnéeScolaire.Name = "lblAnnéeScolaire";
+            this.lblAnnéeScolaire.Size = new System.Drawing.Size(91, 13);
+            this.lblAnnéeScolaire.TabIndex = 28;
+            this.lblAnnéeScolaire.Text = "Année scolaire";
+            // 
+            // cbxAnnéeScolaire
+            // 
+            this.cbxAnnéeScolaire.BackColor = System.Drawing.Color.Linen;
+            this.cbxAnnéeScolaire.FormattingEnabled = true;
+            this.cbxAnnéeScolaire.Items.AddRange(new object[] {
+            "2020-2021",
+            "2021-2022",
+            "2022-2023",
+            "2023-2024",
+            "2024-2025",
+            "2025-2026",
+            "2026-2027",
+            "2027-2028",
+            "2028-2029",
+            "2029-2030"});
+            this.cbxAnnéeScolaire.Location = new System.Drawing.Point(457, 155);
+            this.cbxAnnéeScolaire.Name = "cbxAnnéeScolaire";
+            this.cbxAnnéeScolaire.Size = new System.Drawing.Size(121, 21);
+            this.cbxAnnéeScolaire.TabIndex = 29;
+            this.cbxAnnéeScolaire.SelectedIndexChanged += new System.EventHandler(this.cbxAnnéeScolaire_SelectedIndexChanged);
             // 
             // Principal
             // 
@@ -385,7 +441,11 @@
             this.BackColor = System.Drawing.Color.White;
             this.BackgroundImage = global::Brevet_blanc.Properties.Resources.Fond;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(915, 557);
+            this.ClientSize = new System.Drawing.Size(915, 592);
+            this.Controls.Add(this.cbxAnnéeScolaire);
+            this.Controls.Add(this.lblAnnéeScolaire);
+            this.Controls.Add(this.lblDatesBrevet);
+            this.Controls.Add(this.txb_dates_brevet);
             this.Controls.Add(this.btnDossierRésultats);
             this.Controls.Add(this.lblClasses);
             this.Controls.Add(this.label4);
@@ -461,6 +521,10 @@
         private System.ComponentModel.BackgroundWorker ThreadStatistiques;
         private System.Windows.Forms.Label lblClasses;
         private System.Windows.Forms.Button btnDossierRésultats;
+        private System.Windows.Forms.TextBox txb_dates_brevet;
+        private System.Windows.Forms.Label lblDatesBrevet;
+        private System.Windows.Forms.Label lblAnnéeScolaire;
+        private System.Windows.Forms.ComboBox cbxAnnéeScolaire;
     }
 }
 

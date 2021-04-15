@@ -2,6 +2,7 @@
 using Microsoft.Office.Interop.Word;
 using System;
 using System.Data;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -17,6 +18,10 @@ namespace Brevet_blanc
         public Principal()
         {
             InitializeComponent();
+            txb_dates_brevet.ForeColor = SystemColors.GrayText;
+            txb_dates_brevet.Text = @"28 et 29 mars 2021";
+            this.txb_dates_brevet.Leave += this.txb_dates_brevet_Leave;
+            this.txb_dates_brevet.Enter += this.txb_dates_brevet_Enter;
         }
 
         public DataTable TableNotes = new DataTable();
@@ -26,15 +31,17 @@ namespace Brevet_blanc
         public string Progression;
         public string StrPath2;
         public string CheminFichierType;
+        public string AnnéeScolaire;
 
         private void Principal_Load(object sender, EventArgs e)
         {
             TuerProcessus("Excel");
             if (lblSource.Text == "")
-                lblSource.Text = @"C:\Users\User\Desktop\";
-            lblDestination.Text = @"C:\Users\User\Desktop\";
+                lblSource.Text = @"C:\Users\Laurent\Desktop\";
+            lblDestination.Text = @"C:\Users\Laurent\Desktop\";
             rdbSansOral.Checked = true;
             rdbDnb1.Checked = true;
+            cbxAnnéeScolaire.SelectedIndex = 0;
 
             if (!Directory.Exists(lblDestination.Text + @"DNB"))
                 Directory.CreateDirectory(lblDestination.Text + @"DNB");
@@ -52,6 +59,24 @@ namespace Brevet_blanc
             RemplirListeBox(chkLb_Notes, TableNotes);
 
             RemplirListeBox(chkLb_Composantes, TableComposantes);
+        }
+
+        private void txb_dates_brevet_Leave(object sender, EventArgs e)
+        {
+            if (txb_dates_brevet.Text.Length == 0)
+            {
+                txb_dates_brevet.Text = @"28 et 29 mars 2021";
+                txb_dates_brevet.ForeColor = SystemColors.GrayText;
+            }
+        }
+
+        private void txb_dates_brevet_Enter(object sender, EventArgs e)
+        {
+            if (txb_dates_brevet.Text == @"28 et 29 mars 2021")
+            {
+                txb_dates_brevet.Text = "";
+                txb_dates_brevet.ForeColor = SystemColors.WindowText;
+            }
         }
 
         private void BtnChoisirSource(object sender, EventArgs e)
@@ -454,6 +479,15 @@ namespace Brevet_blanc
                         var nomDuFichierDnb = Path.GetFileNameWithoutExtension(fichier);
                         Classe = nomDuFichierDnb.Substring(5, 2);
 
+                        foreach (Field champfusion in wordDocument.Fields)
+                        {
+                            if (champfusion.Code.Text.Contains("Date_Brevet"))
+                            {
+                                champfusion.Select();
+                                appWord.Selection.TypeText(txb_dates_brevet.Text);
+                            }
+                        }
+
                         string strDataFile = fichier;
                         object objTrue = true;
                         object objFalse = false;
@@ -512,9 +546,9 @@ namespace Brevet_blanc
         {
             progressBar1.Value = 0;
             lblCompteur.Text = "";
-            lblClasse.ForeColor = System.Drawing.Color.ForestGreen;
+            lblClasse.ForeColor = Color.ForestGreen;
             lblClasse.Text = @"Terminé !";
-            lblClasses.ForeColor = System.Drawing.Color.ForestGreen;
+            lblClasses.ForeColor = Color.ForestGreen;
         }
 
         private void BtnGénérerStatistiques(object sender, EventArgs e)
@@ -601,7 +635,7 @@ namespace Brevet_blanc
                 {
                     #region initialisation des variables
                     var fichierDnbXlsx = Path.GetFileName(file);
-                    statSynthèse.Range["A1"].Value = "Année scolaire 2020-2021";
+                    statSynthèse.Range["A1"].Value = "Année scolaire " + AnnéeScolaire;
                     if (fichierDnbXlsx.Contains(dnb.Text) && fichierDnbXlsx.Contains("xlsx")) //DNB1 ou DNB2
                     {
                         if ((ligneStatSynthèse == 3) || (ligneStatSynthèse == 15))
@@ -938,7 +972,7 @@ namespace Brevet_blanc
 
                 if (nombreClasses > 0)
                 {
-                    statMoyennes.Range["A1"].Value = "Année scolaire 2020-2021";
+                    statMoyennes.Range["A1"].Value = "Année scolaire " + AnnéeScolaire;
                     #region Calcul de la moyenne générale par épreuve pour le niveau
                     statMoyennes.Range["A" + (ligneStatMoyennesEe + 2)].Value = "Niveau";
                     var colonne = 'B';
@@ -1052,7 +1086,7 @@ namespace Brevet_blanc
                 #endregion
                 if (nombreClasses > 0)
                 {
-                    statMoyennesControle.Range["A1"].Value = "Année scolaire 2020-2021";
+                    statMoyennesControle.Range["A1"].Value = "Année scolaire " + AnnéeScolaire;
                     #region Calcul de la moyenne générale par épreuve pour le niveau
                     statMoyennesControle.Range["A" + (ligneStatMoyennesCc + 2)].Value = "Niveau";
 
@@ -1376,6 +1410,11 @@ namespace Brevet_blanc
 
         private void rdbAvecOral_CheckedChanged(object sender, EventArgs e)
         {
+        }
+
+        private void cbxAnnéeScolaire_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AnnéeScolaire = cbxAnnéeScolaire.Text;
         }
     }
 }
