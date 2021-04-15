@@ -37,8 +37,8 @@ namespace Brevet_blanc
         {
             TuerProcessus("Excel");
             if (lblSource.Text == "")
-                lblSource.Text = @"C:\Users\Laurent\Desktop\";
-            lblDestination.Text = @"C:\Users\Laurent\Desktop\";
+                lblSource.Text = @"C:\Users\" + Environment.UserName + @"\Desktop\";
+            lblDestination.Text = @"C:\Users\" + Environment.UserName + @"\Desktop\";
             rdbSansOral.Checked = true;
             rdbDnb1.Checked = true;
             cbxAnnéeScolaire.SelectedIndex = 0;
