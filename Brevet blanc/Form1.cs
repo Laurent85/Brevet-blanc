@@ -1377,22 +1377,11 @@ namespace Brevet_blanc
 
         private void rdbSansOral_CheckedChanged(object sender, EventArgs e)
         {
-            if (rdbSansOral.Checked)
-            {
-                if (Directory.Exists(lblDestination.Text + @"DNB\Modèles"))
-                    Directory.Delete(lblDestination.Text + @"DNB\Modèles", true);
-                if (!Directory.Exists(lblDestination.Text + @"DNB\Modèles"))
-                    Directory.CreateDirectory(lblDestination.Text + @"DNB\Modèles");
-                CopieDesFichiersTypes();
-            }
-            if (rdbAvecOral.Checked)
-            {
-                if (Directory.Exists(lblDestination.Text + @"DNB\Modèles"))
-                    Directory.Delete(lblDestination.Text + @"DNB\Modèles", true);
-                if (!Directory.Exists(lblDestination.Text + @"DNB\Modèles"))
-                    Directory.CreateDirectory(lblDestination.Text + @"DNB\Modèles");
-                CopieDesFichiersTypes();
-            }
+            if (Directory.Exists(lblDestination.Text + @"DNB\Modèles"))
+                Directory.Delete(lblDestination.Text + @"DNB\Modèles", true);
+            if (!Directory.Exists(lblDestination.Text + @"DNB\Modèles"))
+                Directory.CreateDirectory(lblDestination.Text + @"DNB\Modèles");
+            CopieDesFichiersTypes();
 
             DialogResult dialogResult = MessageBox.Show(@"Voulez-vous modifier le fichier Word ?", @"Modification", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
@@ -1406,10 +1395,6 @@ namespace Brevet_blanc
             {
                 //do something else
             }
-        }
-
-        private void rdbAvecOral_CheckedChanged(object sender, EventArgs e)
-        {
         }
 
         private void cbxAnnéeScolaire_SelectedIndexChanged(object sender, EventArgs e)

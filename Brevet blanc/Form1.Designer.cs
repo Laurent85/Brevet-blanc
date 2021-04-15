@@ -300,7 +300,6 @@
             this.rdbAvecOral.TabStop = true;
             this.rdbAvecOral.Text = "Avec oral";
             this.rdbAvecOral.UseVisualStyleBackColor = true;
-            this.rdbAvecOral.CheckedChanged += new System.EventHandler(this.rdbAvecOral_CheckedChanged);
             // 
             // numDelta
             // 
